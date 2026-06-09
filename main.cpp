@@ -1,41 +1,111 @@
 #include <windows.h>
+#include <gl/GL.h>
+#pragma comment(lib, "opengl32.lib")
 
-static int left = 0;
-static int top = 300;
-static int right = 400;
-static int bottom = 100;
+static constexpr int width = 100; 
+static constexpr int height = 100;
+static int rectX = 50;
+static int rectY = 50;
+
+HDC hdc{};
+HGLRC hglrc{};
+
+void Update()
+{
+
+}
+
+void Render()
+{
+	glClearColor(0.7f,0.1f,0.3f,0.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	SwapBuffers(hdc);
+}
+
+bool InitOpengl(HWND hwnd)
+{
+	hdc = GetDC(hwnd);
+
+	PIXELFORMATDESCRIPTOR pfd = {};
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 32;   // 32 бита на цвет
+	pfd.cDepthBits = 24;   // буфер глубины
+	pfd.cStencilBits = 8;  // трафарет
+	pfd.iLayerType = PFD_MAIN_PLANE;
+
+	int format = ChoosePixelFormat(hdc, &pfd);
+	if(!format) return false;
+
+	if(!SetPixelFormat(hdc, format, &pfd)) return false;
+
+	hglrc = wglCreateContext(hdc);
+	if(!wglMakeCurrent(hdc, hglrc)) return false;
+
+	return true;
+}
+
+void CleanupOpenGL(HWND hwnd)
+{
+	if(hglrc)
+	{
+		wglMakeCurrent(nullptr, nullptr);
+		wglDeleteContext(hglrc);
+		hglrc = nullptr;
+	}
+	if(hdc)
+	{
+		ReleaseDC(hwnd, hdc);
+		hdc = nullptr;
+	}
+}
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	/* [~] TODO: Add WM_PAINT to switch logic */
-	/* [-] TODO: Add WM_KEYDOWN to switch	  */
+	/* [+] TODO: Add WM_PAINT to switch logic */
+	/* [+] TODO: Add WM_KEYDOWN to switch	  */
 	/* [-] TODO: Maybe use WM_SIZE(with static gloabal variables) and GetClientRect for easyer drawing images */
-	/* [-] TODO: Make rectangle move just use of keyboard keys { *Use wm_keydown and another methods* }		  */
+	/* [+] TODO: Make rectangle move just use of keyboard keys { *Use wm_keydown and another methods* }		  */
+	/* [-] TODO: Create back-buffering!!! */
 
 	switch(message)
 	{
+	case WM_CREATE:
+		InitOpengl(hwnd);
+		break;
 	case WM_DESTROY:
+		CleanupOpenGL(hwnd);
 		PostQuitMessage(0);
 		break;
-	case WM_TIMER:
-		right += 10;
-		if (right >= 1000)
+	case WM_KEYDOWN: // [-] TODO: Delete this and make Update function work
+		switch (wParam)
 		{
-			bottom += 10;
+		case VK_LEFT: 
+		{
+			rectX -= 5;
+			break;
 		}
-		InvalidateRect(hwnd, nullptr, TRUE);
-		break;
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hwnd, &ps);
-		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 2));
-		SetDCBrushColor(hdc, RGB(255, 0, 0));
-		SetDCPenColor(hdc, RGB(255, 0, 0));
-		Rectangle(hdc, left, top, right, bottom);
-		EndPaint(hwnd, &ps);
-		break;
-	}
+		case VK_RIGHT: 
+		{
+			rectX += 5;
+			break;
+		}
+		case VK_UP: 
+		{
+			rectY -= 5;
+			break; 
+		}
+		case VK_DOWN: 
+		{
+			rectY += 5;
+			break; 
+		}
+		default: 
+			break;
+		}
 	default:
 		return DefWindowProcW(hwnd, message, wParam, lParam);
 	}
@@ -74,10 +144,8 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hInstPrev,
 	}
 
 	ShowWindow(hwnd, cmdShow);
-	UpdateWindow(hwnd); //use for update window immidiately
-	SetTimer(hwnd, 1, 16, nullptr); //create timer that run every n milliseconds
+	UpdateWindow(hwnd); //use for update window immidiately on start
 
-	//BOOL receiver{};
 	while(msg.message != WM_QUIT)
 	{
 		if(PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -86,9 +154,9 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hInstPrev,
 			DispatchMessageW(&msg);
 		}
 		else
-		{	//[-] TODO: Add two methods to render and update game in free time
-			//update()
-			//render()
+		{	//[+] TODO: Add two methods to render and update game in free time
+			Update();
+			Render();
 		}
 	}
 	return msg.wParam;
