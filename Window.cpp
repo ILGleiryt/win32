@@ -1,6 +1,17 @@
 #include "Window.h"
 
-Window::Window(const std::wstring& wnd_title, std::int32_t wnd_width, std::int32_t wnd_height)
+void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight) {
+	ValidateWindowSize(clientWidth, clientHeight);
+	RECT rc = { 0, 0, clientWidth, clientHeight };
+	DWORD style = GetWindowLong(hwnd, GWL_STYLE);
+	DWORD exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+	AdjustWindowRectEx(&rc, style, FALSE, exStyle);
+	int fullWidth = rc.right - rc.left;
+	int fullHeight = rc.bottom - rc.top;
+	SetWindowPos(hwnd, nullptr, 0, 0, fullWidth, fullHeight, SWP_NOMOVE | SWP_NOZORDER);
+}
+
+Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wnd_height)
 	: m_width(wnd_width), m_height(wnd_height)
 	{
 		ValidateWindowSize(wnd_height, wnd_width);
@@ -23,7 +34,7 @@ Window::Window(const std::wstring& wnd_title, std::int32_t wnd_width, std::int32
 
 		if (!RegisterClassExW(&wc)) throw std::runtime_error("Class creation error");
 
-		if (m_hwnd = CreateWindowExW(0, L"Game", wnd_title.c_str(), WS_OVERLAPPEDWINDOW,
+		if (m_hwnd = CreateWindowExW(0, L"Game", wnd_title, WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, CW_USEDEFAULT, wnd_width, wnd_height,
 			nullptr, nullptr, GetModuleHandleW(nullptr), this); !m_hwnd)
 		{
@@ -38,16 +49,7 @@ Window::Window(const std::wstring& wnd_title, std::int32_t wnd_width, std::int32
 	{
 		if (m_hwnd) DestroyWindow(m_hwnd);
 	};
-	void Window::ResizeWindow(std::int32_t new_width, std::int32_t new_height)
-	{
-		if (new_width <= 0 || new_height <= 0)
-			throw std::invalid_argument("Bad window size");
 
-		m_width = new_width;
-		m_height = new_height;
-
-		SetWindowPos(m_hwnd, nullptr, 0, 0, m_width, m_height, SWP_NOMOVE | SWP_NOZORDER);
-	}
 
 	std::int32_t Window::GameLoop()
 	{
@@ -58,9 +60,19 @@ Window::Window(const std::wstring& wnd_title, std::int32_t wnd_width, std::int32
 			{
 				if (message.message == WM_QUIT)
 					return (int)message.wParam;
-				TranslateMessage(&message);
-				DispatchMessageW(&message);
+				if (GetAsyncKeyState('R') & 1) {
+					m_width = 1024;
+					m_height = 720;
+					m_requestResize = true;
+				}
+					TranslateMessage(&message);
+					DispatchMessageW(&message);
+				
 			}
+				if (m_requestResize) {
+					SizeWindow(m_hwnd, m_width, m_height);
+					m_requestResize = false;
+				}
 		}
 	}
 
@@ -107,12 +119,14 @@ Window::Window(const std::wstring& wnd_title, std::int32_t wnd_width, std::int32
 	{
 		switch (message)
 		{
+		case WM_KEYDOWN:
+			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			return 0;
 		case WM_SIZE:
-			m_width = LOWORD(lParam);
-			m_height = HIWORD(lParam);
+			//m_width = LOWORD(lParam);
+			//m_height = HIWORD(lParam);
 			return 0;
 		default:
 			return DefWindowProcW(hwnd, message, wParam, lParam);
