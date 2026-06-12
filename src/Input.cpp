@@ -21,28 +21,28 @@ void Input::Update()
 	MousePosition(mouse_PosX, mouse_PosY);
 }
 
-std::int32_t Input::IsKeyPressed(std::int32_t key_code) const
+std::int32_t Input::IsKeyPressed(std::int32_t key_code) const noexcept
 {
 	return (CurrentKeys[key_code] && !PreviousKeys[key_code]);
 }
 
-std::int32_t Input::IsKeyReleased(std::int32_t key_code) const
+std::int32_t Input::IsKeyReleased(std::int32_t key_code) const noexcept
 {
 	return (!CurrentKeys[key_code] && PreviousKeys[key_code]);
 }
 
-std::int32_t Input::IsKeyDown(std::int32_t key_code) const
+std::int32_t Input::IsKeyDown(std::int32_t key_code) const noexcept
 {
 	return CurrentKeys[key_code];
 }
 
-void Input::MousePosition(std::int32_t& x, std::int32_t& y)
+void Input::MousePosition(std::int32_t& x, std::int32_t& y) noexcept
 {
 	x = mouseDeltaX;
 	y = mouseDeltaY;
 }
 
-bool Input::IsMouseKeyDown(std::int32_t button) const
+bool Input::IsMouseKeyDown(std::int32_t button) const noexcept
 {
 	if (!GetSystemMetrics(SM_SWAPBUTTON))
 	{

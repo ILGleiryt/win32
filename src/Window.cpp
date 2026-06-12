@@ -90,8 +90,14 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		switch (message)
 		{
 		case WM_KEYDOWN:
+			// onKeyPressed
 			break;
 		case WM_KEYUP:
+			// onKeyReleased
+			break;
+		case WM_SYSKEYDOWN:
+			break;
+		case WM_SYSKEYUP:
 			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
@@ -101,6 +107,10 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 			m_height = HIWORD(lParam);
 			break;
 		case WM_CHAR:
+			// onKeyChar
+			break;
+		case WM_KILLFOCUS:
+			// when winidow lost focus block keyboard input
 			break;
 		default:
 			return DefWindowProcW(hwnd, message, wParam, lParam);
