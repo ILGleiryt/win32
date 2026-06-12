@@ -6,6 +6,6 @@ class Renderer
 public:
 	Renderer() {};
 
-	void Render() {};
-	void Update() {};
+	void Render(float dt) {};
+	void Update(float dt) {};
 };

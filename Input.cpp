@@ -18,7 +18,6 @@ void Input::Update()
 	mouseDeltaY = newY - mouse_PosY;
 	mouse_PosX = newX;
 	mouse_PosY = newY;
-	//IsMouseKeyDown();
 	MousePosition(mouse_PosX, mouse_PosY);
 }
 
@@ -41,13 +40,10 @@ void Input::MousePosition(std::int32_t& x, std::int32_t& y)
 {
 	x = mouseDeltaX;
 	y = mouseDeltaY;
-	std::cout << "Mouse X = " << x << "\nMouse Y = " << y << std::endl;
 }
 
 bool Input::IsMouseKeyDown(std::int32_t button) const
 {
-	// VK_LBUTTON	0x01	Left mouse button
-	//VK_RBUTTON	0x02	Right mouse button
 	if (!GetSystemMetrics(SM_SWAPBUTTON))
 	{
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)

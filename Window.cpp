@@ -13,21 +13,21 @@ void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight)
 }
 
 Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wnd_height)
-	: m_width(wnd_width), m_height(wnd_height), running(true)
+	: m_width(wnd_width), m_height(wnd_height), hinstance(GetModuleHandleW(nullptr))
 	{
 		ValidateWindowSize(wnd_width, wnd_height);
 
-		WNDCLASSEX wc{};
+		WNDCLASSEX wc{ 0 };
 
-		wc.hInstance = GetModuleHandleW(nullptr);
-		wc.lpszClassName = L"Game";
+		wc.hInstance = GetInstance();
+		wc.lpszClassName = GetName();
 		wc.lpfnWndProc = MyWndProc;
 		wc.cbSize = sizeof(WNDCLASSEX);
 		wc.style = CS_HREDRAW | CS_VREDRAW;
 		wc.hbrBackground = (HBRUSH)(COLOR_WINDOW);
-		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
-		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
+		wc.hCursor = nullptr;
+		wc.hIcon = nullptr;
+		wc.hIconSm = nullptr;
 		wc.lpszMenuName = nullptr;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
@@ -35,9 +35,9 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 
 		if (!RegisterClassExW(&wc)) throw std::runtime_error("Class creation error");
 
-		if (m_hwnd = CreateWindowExW(0, L"Game", wnd_title, WS_OVERLAPPEDWINDOW,
+		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, CW_USEDEFAULT, wnd_width, wnd_height,
-			nullptr, nullptr, GetModuleHandleW(nullptr), this); !m_hwnd)
+			nullptr, nullptr, GetInstance(), this); !m_hwnd)
 		{
 			throw std::runtime_error("Error on window creation");
 		}
@@ -49,10 +49,16 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 	Window::~Window() 
 	{
 		if (m_hwnd) DestroyWindow(m_hwnd);
+		UnregisterClassW(GetName(), GetInstance());
 	};
 
-	std::int32_t Window::GetWidth() const { return m_width; }
-	std::int32_t Window::GetHeight() const { return m_height; }
+	HINSTANCE Window::GetInstance() const noexcept
+	{
+		return hinstance;
+	}
+
+	std::int32_t Window::GetWidth() const noexcept { return m_width; }
+	std::int32_t Window::GetHeight() const noexcept { return m_height; }
 
 	void Window::ValidateWindowSize(std::int32_t wnd_width, std::int32_t wnd_height) const
 	{
@@ -84,10 +90,8 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		switch (message)
 		{
 		case WM_KEYDOWN:
-			//switch (message)
-			//{
-			//
-			//}
+			break;
+		case WM_KEYUP:
 			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
@@ -95,6 +99,8 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		case WM_SIZE:
 			m_width = LOWORD(lParam);
 			m_height = HIWORD(lParam);
+			break;
+		case WM_CHAR:
 			break;
 		default:
 			return DefWindowProcW(hwnd, message, wParam, lParam);
@@ -122,4 +128,9 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 			DispatchMessageW(&message);
 		}
 		return true;
+	}
+
+	const wchar_t* Window::GetName() const noexcept
+	{
+		return wnd_name;
 	}

@@ -1,5 +1,5 @@
 #pragma once
-#include <Windows.h>
+#include "Win32Wrapper.h"
 #include <cstdint>
 #include <array>
 #include <iostream>
