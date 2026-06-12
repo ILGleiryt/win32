@@ -1,6 +1,7 @@
 #include "Window.h"
 
-void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight) {
+void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight) 
+{
 	ValidateWindowSize(clientWidth, clientHeight);
 	RECT rc = { 0, 0, clientWidth, clientHeight };
 	DWORD style = GetWindowLong(hwnd, GWL_STYLE);
@@ -12,9 +13,9 @@ void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight) {
 }
 
 Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wnd_height)
-	: m_width(wnd_width), m_height(wnd_height)
+	: m_width(wnd_width), m_height(wnd_height), running(true)
 	{
-		ValidateWindowSize(wnd_height, wnd_width);
+		ValidateWindowSize(wnd_width, wnd_height);
 
 		WNDCLASSEX wc{};
 
@@ -23,14 +24,14 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		wc.lpfnWndProc = MyWndProc;
 		wc.cbSize = sizeof(WNDCLASSEX);
 		wc.style = CS_HREDRAW | CS_VREDRAW;
-		wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+		wc.hbrBackground = (HBRUSH)(COLOR_WINDOW);
 		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.lpszMenuName = nullptr;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
-		wc.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
 		if (!RegisterClassExW(&wc)) throw std::runtime_error("Class creation error");
 
@@ -50,41 +51,8 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		if (m_hwnd) DestroyWindow(m_hwnd);
 	};
 
-
-	std::int32_t Window::GameLoop()
-	{
-		MSG message;
-		while (true)
-		{
-			while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
-			{
-				if (message.message == WM_QUIT)
-					return (int)message.wParam;
-				if (GetAsyncKeyState('R') & 1) {
-					m_width = 1024;
-					m_height = 720;
-					m_requestResize = true;
-				}
-					TranslateMessage(&message);
-					DispatchMessageW(&message);
-				
-			}
-				if (m_requestResize) {
-					SizeWindow(m_hwnd, m_width, m_height);
-					m_requestResize = false;
-				}
-		}
-	}
-
-	std::int32_t Window::GetWidth() const
-	{
-		return m_width;
-	}
-
-	std::int32_t Window::GetHeight() const
-	{
-		return m_height;
-	}
+	std::int32_t Window::GetWidth() const { return m_width; }
+	std::int32_t Window::GetHeight() const { return m_height; }
 
 	void Window::ValidateWindowSize(std::int32_t wnd_width, std::int32_t wnd_height) const
 	{
@@ -103,16 +71,12 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
 		}
 		else 
-		{
 			pWindow = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-		}
 		
-		if (pWindow) {
+		if (pWindow) 
 			return pWindow->HandleMessage(hwnd,message, wParam, lParam);
-		}
-		else {
+		else 
 			return DefWindowProcW(hwnd, message, wParam, lParam);
-		}
 	}
 
 	LRESULT Window::HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -120,16 +84,42 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		switch (message)
 		{
 		case WM_KEYDOWN:
+			//switch (message)
+			//{
+			//
+			//}
 			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
-			return 0;
+			break;
 		case WM_SIZE:
-			//m_width = LOWORD(lParam);
-			//m_height = HIWORD(lParam);
-			return 0;
+			m_width = LOWORD(lParam);
+			m_height = HIWORD(lParam);
+			break;
 		default:
 			return DefWindowProcW(hwnd, message, wParam, lParam);
 		}
 		return 0;
+	}
+
+	void Window::Resize(int width, int height)
+	{
+		ValidateWindowSize(width, height);
+		SizeWindow(m_hwnd, width, height);
+		m_width = width;
+		m_height = height;
+	}
+
+	bool Window::ProcessSystemMessages()
+	{
+		MSG message;
+		while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (message.message == WM_QUIT)
+				return false;
+
+			TranslateMessage(&message);
+			DispatchMessageW(&message);
+		}
+		return true;
 	}

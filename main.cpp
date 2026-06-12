@@ -1,19 +1,15 @@
-#include "Window.h"
 // use directx instead for easy development
 #include <iostream>
+#include "Game.h"
 
 int main()
 {
 	try 
 	{
-		Window wnd(L"MyWindow", 800, 600);
+		Game game;
+		game.Run();
 
-		int exitCode = wnd.GameLoop();
-
- // work on doesnt work resize function
-
-		std::cout << "Window closed. Exit code: " << exitCode << std::endl << "Window parameters: Height>> " << wnd.GetHeight() << "Width>> " << wnd.GetWidth() << std::endl;
-		return exitCode;
+		return 0;
 	}
 	catch (const std::exception& e) 
 	{
