@@ -4,11 +4,11 @@
 void Input::Update()
 {
 	PreviousKeys = CurrentKeys;
-	for (size_t i = 0; i < CurrentKeys.size(); ++i) {
-		CurrentKeys[i] = (GetAsyncKeyState(static_cast<int>(i)) & 0x8000) != 0;
+	for (unsignedInt i = 0; i < CurrentKeys.size(); ++i) {
+		CurrentKeys[i] = (GetAsyncKeyState(static_cast<signedInt>(i)) & 0x8000) != 0;
 	}
 
-	int newX, newY;
+	signedInt newX, newY;
 	POINT mouse;
 	GetCursorPos(&mouse);
 	newX = mouse.x;
@@ -21,28 +21,28 @@ void Input::Update()
 	MousePosition(mouse_PosX, mouse_PosY);
 }
 
-std::int32_t Input::IsKeyPressed(std::int32_t key_code) const noexcept
+signedInt Input::IsKeyPressed(signedInt key_code) const noexcept
 {
 	return (CurrentKeys[key_code] && !PreviousKeys[key_code]);
 }
 
-std::int32_t Input::IsKeyReleased(std::int32_t key_code) const noexcept
+signedInt Input::IsKeyReleased(signedInt key_code) const noexcept
 {
 	return (!CurrentKeys[key_code] && PreviousKeys[key_code]);
 }
 
-std::int32_t Input::IsKeyDown(std::int32_t key_code) const noexcept
+signedInt Input::IsKeyDown(signedInt key_code) const noexcept
 {
 	return CurrentKeys[key_code];
 }
 
-void Input::MousePosition(std::int32_t& x, std::int32_t& y) noexcept
+void Input::MousePosition(signedInt& x, signedInt& y) noexcept
 {
 	x = mouseDeltaX;
 	y = mouseDeltaY;
 }
 
-bool Input::IsMouseKeyDown(std::int32_t button) const noexcept
+bool Input::IsMouseKeyDown(signedInt button) const noexcept
 {
 	if (!GetSystemMetrics(SM_SWAPBUTTON))
 	{

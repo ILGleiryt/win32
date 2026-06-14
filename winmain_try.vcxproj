@@ -167,14 +167,25 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Opengl.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\gl.c" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\glad\gl.h" />
+    <ClInclude Include="include\glad\wgl.h" />
     <ClInclude Include="include\Input.h" />
+    <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="include\MyTypes.h" />
+    <ClInclude Include="include\Opengl.h" />
+    <ClInclude Include="include\Opengl\glext.h" />
+    <ClInclude Include="include\Opengl\khrplatform.h" />
+    <ClInclude Include="include\Opengl\wglext.h" />
     <ClInclude Include="include\Renderer.h" />
+    <ClCompile Include="src\wgl.c" />
     <ClCompile Include="src\Window.cpp" />
     <ClInclude Include="include\Win32Wrapper.h" />
     <ClInclude Include="include\Window.h" />

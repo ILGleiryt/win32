@@ -1,18 +1,18 @@
 #include "Window.h"
 
-void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight) 
+void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight) 
 {
 	ValidateWindowSize(clientWidth, clientHeight);
 	RECT rc = { 0, 0, clientWidth, clientHeight };
 	DWORD style = GetWindowLong(hwnd, GWL_STYLE);
 	DWORD exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
 	AdjustWindowRectEx(&rc, style, FALSE, exStyle);
-	int fullWidth = rc.right - rc.left;
-	int fullHeight = rc.bottom - rc.top;
+	signedInt fullWidth = rc.right - rc.left;
+	signedInt fullHeight = rc.bottom - rc.top;
 	SetWindowPos(hwnd, nullptr, 0, 0, fullWidth, fullHeight, SWP_NOMOVE | SWP_NOZORDER);
 }
 
-Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wnd_height)
+Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_height)
 	: m_width(wnd_width), m_height(wnd_height), hinstance(GetModuleHandleW(nullptr))
 	{
 		ValidateWindowSize(wnd_width, wnd_height);
@@ -24,7 +24,6 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		wc.lpfnWndProc = MyWndProc;
 		wc.cbSize = sizeof(WNDCLASSEX);
 		wc.style = CS_HREDRAW | CS_VREDRAW;
-		wc.hbrBackground = (HBRUSH)(COLOR_WINDOW);
 		wc.hCursor = nullptr;
 		wc.hIcon = nullptr;
 		wc.hIconSm = nullptr;
@@ -35,7 +34,7 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 
 		if (!RegisterClassExW(&wc)) throw std::runtime_error("Class creation error");
 
-		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, WS_OVERLAPPEDWINDOW,
+		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 			CW_USEDEFAULT, CW_USEDEFAULT, wnd_width, wnd_height,
 			nullptr, nullptr, GetInstance(), this); !m_hwnd)
 		{
@@ -60,7 +59,7 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 	std::int32_t Window::GetWidth() const noexcept { return m_width; }
 	std::int32_t Window::GetHeight() const noexcept { return m_height; }
 
-	void Window::ValidateWindowSize(std::int32_t wnd_width, std::int32_t wnd_height) const
+	void Window::ValidateWindowSize(signedInt wnd_width, signedInt wnd_height) const
 	{
 		if (wnd_height <= 0 || wnd_width <= 0)
 			throw std::invalid_argument("Bad window size");
@@ -118,7 +117,7 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		return 0;
 	}
 
-	void Window::Resize(int width, int height)
+	void Window::Resize(signedInt width, signedInt height)
 	{
 		ValidateWindowSize(width, height);
 		SizeWindow(m_hwnd, width, height);
@@ -140,7 +139,7 @@ Window::Window(const wchar_t* wnd_title, std::int32_t wnd_width, std::int32_t wn
 		return true;
 	}
 
-	const wchar_t* Window::GetName() const noexcept
+	const winByte* Window::GetName() const noexcept
 	{
 		return wnd_name;
 	}

@@ -32,6 +32,6 @@
 #define NOPROXYSTUB
 #define NOTAPE
 
-#define STRICT
+//#define STRICT
 
 #include <Windows.h>
