@@ -33,7 +33,7 @@ void Game::Run()
 			m_window.Resize(512, 360);   
 		}
 		if (m_input.IsKeyDown('R')) {
-			m_window.Resize(1024, 720);
+			m_window.FullScreen(true, true);
 		}
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

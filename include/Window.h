@@ -18,8 +18,12 @@ public:
 	signedInt GetWidth() const noexcept { return m_width; };
 	signedInt GetHeight() const noexcept { return m_height; };
 	float GetDPI_X() noexcept;
+	void FullScreen(bool fullscreen, bool borderless);
 
 private:
+	bool m_fullscreen{ false };
+	int m_windowX, m_windowY, m_windowWidth, m_windowHeight;
+	DWORD m_windowStyle, m_windowExStyle;
 	float m_wndDPI{};
 	const winByte* wnd_name{ L"Game" };
 	HINSTANCE hinstance{};
