@@ -15,32 +15,42 @@
 #endif
 
 typedef HGLRC(WINAPI* PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int*);
-PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
 
-bool OpenGL::Init(HWND hwnd)
+bool OpenGL::Init(HWND hwnd) noexcept
 {
-    HDC hdc = GetDC(hwnd);
-    if (!hdc) return false;
+    HDC hdc;
+    if (hdc = GetDC(hwnd); !hdc) return false;
 
     pixel_format = ChoosePixelFormat(hdc, &pfd);
-    if (!pixel_format) return false;
-    if (!SetPixelFormat(hdc, pixel_format, &pfd)) return false;
-
-    HGLRC temp_rc = wglCreateContext(hdc);
-    if (!temp_rc) return false;
-    wglMakeCurrent(hdc, temp_rc);
-
-    if (!gladLoaderLoadWGL(hdc)) {
-        wglDeleteContext(temp_rc);
+    if (!pixel_format || !SetPixelFormat(hdc, pixel_format, &pfd))
+    {
+        ReleaseDC(hwnd, hdc);
         return false;
     }
-    if (!gladLoaderLoadGL()) {
+
+    HGLRC temp_rc = wglCreateContext(hdc);
+    if (!temp_rc)
+    {
+        ReleaseDC(hwnd, hdc);
+        return false;
+    }
+    if (!wglMakeCurrent(hdc, temp_rc)) 
+    {
         wglDeleteContext(temp_rc);
+        ReleaseDC(hwnd, hdc);
+        return false;
+    }
+
+    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+
+    if (!gladLoaderLoadWGL(hdc) || !gladLoaderLoadGL())
+    {
+        wglDeleteContext(temp_rc);
+        ReleaseDC(hwnd, hdc);
         return false;
     }
     
-
-    int attribs[] = {
+    signedInt attribs[] = {
        WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
        WGL_CONTEXT_MINOR_VERSION_ARB, 6,
        WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
@@ -53,8 +63,11 @@ bool OpenGL::Init(HWND hwnd)
 
     wglMakeCurrent(nullptr, nullptr);
     wglDeleteContext(temp_rc);
-    if (!wglMakeCurrent(hdc, new_rc)) {
+
+    if (!wglMakeCurrent(hdc, new_rc)) 
+    {
         wglDeleteContext(new_rc);
+        ReleaseDC(hwnd, hdc);
         return false;
     }
 
@@ -64,22 +77,22 @@ bool OpenGL::Init(HWND hwnd)
     return true;
 }
 
-bool OpenGL::MakeCurrent(HWND hwnd) const
+bool OpenGL::MakeCurrent(HWND hwnd) const noexcept
 {
     HDC hdc = GetDC(hwnd);
     BOOL result = wglMakeCurrent(hdc, hglrc);
     ReleaseDC(hwnd, hdc);
-    return result == TRUE;
+    return result;
 }
 
-void OpenGL::SwapBuffers(HWND hwnd) const
+void OpenGL::SwapBuffers(HWND hwnd) const noexcept
 {
     HDC hdc = GetDC(hwnd);
     ::SwapBuffers(hdc);
     ReleaseDC(hwnd, hdc);
 }
 
-void OpenGL::Shutdown()
+void OpenGL::Shutdown() noexcept
 {
     if (hglrc)
     {
@@ -87,11 +100,6 @@ void OpenGL::Shutdown()
         wglDeleteContext(hglrc);
         hglrc = nullptr;
     }
-}
-
-void* OpenGL::GetAnyGLFuncAddress(const char* name)
-{
-    return reinterpret_cast<void*>(wglGetProcAddress(name));
 }
 
 const PIXELFORMATDESCRIPTOR OpenGL::pfd = {

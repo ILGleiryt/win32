@@ -1,11 +1,14 @@
 #include "Window.h"
+#include <iostream>
 
-void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight) 
+void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight, float scale)
 {
-	ValidateWindowSize(clientWidth, clientHeight);
-	RECT rc = { 0, 0, clientWidth, clientHeight };
-	DWORD style = GetWindowLong(hwnd, GWL_STYLE);
-	DWORD exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+	signedInt physicWidth{ static_cast<signedInt>(clientWidth * scale) };
+	signedInt physicHeight{ static_cast<signedInt>(clientHeight * scale) };
+	ValidateWindowSize(physicWidth, physicHeight);
+	RECT rc = { 0, 0, physicWidth, physicHeight };
+	DWORD style = GetWindowLongW(hwnd, GWL_STYLE);
+	DWORD exStyle = GetWindowLongW(hwnd, GWL_EXSTYLE);
 	AdjustWindowRectEx(&rc, style, FALSE, exStyle);
 	signedInt fullWidth = rc.right - rc.left;
 	signedInt fullHeight = rc.bottom - rc.top;
@@ -15,10 +18,10 @@ void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight
 Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_height)
 	: m_width(wnd_width), m_height(wnd_height), hinstance(GetModuleHandleW(nullptr))
 	{
+		SetProcessDPIAware();
 		ValidateWindowSize(wnd_width, wnd_height);
 
 		WNDCLASSEX wc{ 0 };
-
 		wc.hInstance = GetInstance();
 		wc.lpszClassName = GetName();
 		wc.lpfnWndProc = MyWndProc;
@@ -34,8 +37,17 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 
 		if (!RegisterClassExW(&wc)) throw std::runtime_error("Class creation error");
 
-		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-			CW_USEDEFAULT, CW_USEDEFAULT, wnd_width, wnd_height,
+		m_wndDPI = GetDPI_X();
+		int physicWidth = static_cast<int>(wnd_width * m_wndDPI);
+		int physicHeight = static_cast<int>(wnd_height * m_wndDPI);
+		RECT rc = { 0, 0, physicWidth, physicHeight };
+		DWORD style = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+		AdjustWindowRectEx(&rc, style, FALSE, 0);
+		int windowWidth = rc.right - rc.left;
+		int windowHeight = rc.bottom - rc.top;
+
+		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, style,
+			CW_USEDEFAULT, CW_USEDEFAULT, windowWidth, windowHeight,
 			nullptr, nullptr, GetInstance(), this); !m_hwnd)
 		{
 			throw std::runtime_error("Error on window creation");
@@ -51,15 +63,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		UnregisterClassW(GetName(), GetInstance());
 	};
 
-	HINSTANCE Window::GetInstance() const noexcept
-	{
-		return hinstance;
-	}
-
-	std::int32_t Window::GetWidth() const noexcept { return m_width; }
-	std::int32_t Window::GetHeight() const noexcept { return m_height; }
-
-	void Window::ValidateWindowSize(signedInt wnd_width, signedInt wnd_height) const
+	void Window::ValidateWindowSize(const signedInt wnd_width, const signedInt wnd_height) const
 	{
 		if (wnd_height <= 0 || wnd_width <= 0)
 			throw std::invalid_argument("Bad window size");
@@ -88,6 +92,13 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 	{
 		switch (message)
 		{
+		case WM_DPICHANGED:
+		{
+			m_wndDPI = HIWORD(wParam);
+			float scale = m_wndDPI / USER_DEFAULT_SCREEN_DPI;
+			SizeWindow(hwnd, m_width, m_height, scale);
+			break;
+		}
 		case WM_KEYDOWN:
 			// onKeyPressed
 			break;
@@ -102,9 +113,15 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 			PostQuitMessage(0);
 			break;
 		case WM_SIZE:
-			m_width = LOWORD(lParam);
-			m_height = HIWORD(lParam);
+		{
+			UINT new_sizeW = LOWORD(lParam);
+			UINT new_sizeH = HIWORD(lParam);
+			float scale = m_wndDPI / USER_DEFAULT_SCREEN_DPI;
+			m_width = static_cast<signedInt>(new_sizeW / scale);
+			m_height = static_cast<signedInt>(new_sizeH / scale);
 			break;
+		}
+
 		case WM_CHAR:
 			// onKeyChar
 			break;
@@ -117,15 +134,15 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		return 0;
 	}
 
-	void Window::Resize(signedInt width, signedInt height)
+	void Window::Resize(const signedInt width, const signedInt height)
 	{
 		ValidateWindowSize(width, height);
-		SizeWindow(m_hwnd, width, height);
+		SizeWindow(m_hwnd, width, height, m_wndDPI);
 		m_width = width;
 		m_height = height;
 	}
 
-	bool Window::ProcessSystemMessages()
+	bool Window::ProcessSystemMessages() noexcept
 	{
 		MSG message;
 		while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
@@ -139,7 +156,11 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		return true;
 	}
 
-	const winByte* Window::GetName() const noexcept
+	float Window::GetDPI_X() noexcept
 	{
-		return wnd_name;
+		HDC hdc = GetDC(nullptr);
+		int dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
+		ReleaseDC(nullptr, hdc);
+		float scaleX = dpiX / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
+		return scaleX;
 	}

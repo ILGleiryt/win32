@@ -181,9 +181,6 @@
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="include\MyTypes.h" />
     <ClInclude Include="include\Opengl.h" />
-    <ClInclude Include="include\Opengl\glext.h" />
-    <ClInclude Include="include\Opengl\khrplatform.h" />
-    <ClInclude Include="include\Opengl\wglext.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClCompile Include="src\wgl.c" />
     <ClCompile Include="src\Window.cpp" />

@@ -1,34 +1,33 @@
 #pragma once
-
 #include "Win32Wrapper.h"
 #include <stdexcept>
 #include "MyTypes.h"
-
-// Maybe add xaudio for sound and direct2d for gui 
-
+ 
 class Window
 {
 public:
-	Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_height);
-	~Window();
+	Window(const winByte* wnd_title, const signedInt wnd_width, const signedInt wnd_height);
+	~Window() noexcept;
 	Window& operator=(const Window& w) = delete;
 	Window(const Window&) = delete;
-	HWND Get_Handle() const { return m_hwnd; }
-	void Resize(signedInt width, signedInt height);
-	bool ProcessSystemMessages();
-	const winByte* GetName() const noexcept;
-	HINSTANCE GetInstance() const noexcept;
-	std::int32_t GetWidth() const noexcept;
-	std::int32_t GetHeight() const noexcept;
+	HWND Get_Handle() const noexcept { return m_hwnd; }
+	void Resize(const signedInt width, const signedInt height);
+	bool ProcessSystemMessages() noexcept;
+	const winByte* GetName() const noexcept { return wnd_name; };
+	HINSTANCE GetInstance() const noexcept { return hinstance; };
+	signedInt GetWidth() const noexcept { return m_width; };
+	signedInt GetHeight() const noexcept { return m_height; };
+	float GetDPI_X() noexcept;
 
 private:
+	float m_wndDPI{};
 	const winByte* wnd_name{ L"Game" };
-	HINSTANCE hinstance;
+	HINSTANCE hinstance{};
 	HWND m_hwnd{ nullptr };
 	signedInt m_width{};
 	signedInt m_height{};
 
-	void SizeWindow(HWND hwnd, signedInt width, signedInt height);
+	void SizeWindow(HWND hwnd, signedInt width, signedInt height, float scale);
 	void ValidateWindowSize(signedInt wnd_width, signedInt wnd_height) const;
 	static LRESULT CALLBACK MyWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);

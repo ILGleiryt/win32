@@ -1,4 +1,6 @@
 #pragma once
+#include "MyTypes.h"
+
 #include <glad/gl.h>
 #include <glad/wgl.h>
 #pragma comment(lib, "opengl32.lib")
@@ -8,14 +10,12 @@ class OpenGL
 public:
     OpenGL() : hglrc(nullptr), pixel_format(0) {};
     ~OpenGL() { Shutdown(); };
-    bool Init(HWND hwnd);
-    bool MakeCurrent(HWND hwnd) const;
-    void SwapBuffers(HWND hwnd) const;
-    void Shutdown();
-    void* GetAnyGLFuncAddress(const char* name);
+    bool Init(HWND hwnd) noexcept;
+    bool MakeCurrent(HWND hwnd) const noexcept;
+    void SwapBuffers(HWND hwnd) const noexcept;
+    void Shutdown() noexcept;
 private:
-    HDC hdc{ nullptr };
     HGLRC hglrc{};
-    int pixel_format{};
+    signedInt pixel_format{};
     static const PIXELFORMATDESCRIPTOR pfd;
 };

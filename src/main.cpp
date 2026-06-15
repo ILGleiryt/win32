@@ -6,7 +6,7 @@ int main()
 {
 	try 
 	{
-		Game game;
+		Game game(L"Game111", 300, 300);
 		game.Run();
 
 		return 0;

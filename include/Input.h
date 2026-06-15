@@ -11,12 +11,12 @@ enum ButtonState {};
 class Input
 {
 public:
-	void Update();
+	void Update() noexcept;
 
-	signedInt IsKeyPressed(signedInt key_code) const noexcept;
-	signedInt IsKeyReleased(signedInt key_code) const noexcept;
-	signedInt IsKeyDown(signedInt key_code) const noexcept;
-	void MousePosition(signedInt& x, signedInt& y) noexcept;
+	signedInt IsKeyPressed(unsignedByte key_code) const noexcept;
+	signedInt IsKeyReleased(unsignedByte key_code) const noexcept;
+	signedInt IsKeyDown(unsignedByte key_code) const noexcept;
+	void MousePosition(signedInt& x, signedInt& y) const noexcept;
 	bool IsMouseKeyDown(signedInt button) const noexcept;
 
 private:

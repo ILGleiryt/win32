@@ -56,15 +56,6 @@
     <ClInclude Include="include\MyTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Opengl\glext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Opengl\khrplatform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Opengl\wglext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Opengl.h">
       <Filter>Header Files</Filter>
     </ClInclude>

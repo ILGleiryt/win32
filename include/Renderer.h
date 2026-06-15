@@ -4,8 +4,6 @@
 class Renderer
 {
 public:
-	Renderer() {};
-
-	void Render(float dt) {};
+	void Render() {};
 	void Update(float dt) {};
 };

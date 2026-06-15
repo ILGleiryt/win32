@@ -1,11 +1,11 @@
 #include "Input.h"
 
 
-void Input::Update()
+void Input::Update() noexcept
 {
 	PreviousKeys = CurrentKeys;
-	for (unsignedInt i = 0; i < CurrentKeys.size(); ++i) {
-		CurrentKeys[i] = (GetAsyncKeyState(static_cast<signedInt>(i)) & 0x8000) != 0;
+	for (signedTinyInt i = 0; i < CurrentKeys.size(); ++i) {
+		CurrentKeys[i] = (GetAsyncKeyState(static_cast<signedTinyInt>(i)) & 0x8000) != 0;
 	}
 
 	signedInt newX, newY;
@@ -21,22 +21,22 @@ void Input::Update()
 	MousePosition(mouse_PosX, mouse_PosY);
 }
 
-signedInt Input::IsKeyPressed(signedInt key_code) const noexcept
+signedInt Input::IsKeyPressed(unsignedByte key_code) const noexcept
 {
 	return (CurrentKeys[key_code] && !PreviousKeys[key_code]);
 }
 
-signedInt Input::IsKeyReleased(signedInt key_code) const noexcept
+signedInt Input::IsKeyReleased(unsignedByte key_code) const noexcept
 {
 	return (!CurrentKeys[key_code] && PreviousKeys[key_code]);
 }
 
-signedInt Input::IsKeyDown(signedInt key_code) const noexcept
+signedInt Input::IsKeyDown(unsignedByte key_code) const noexcept
 {
 	return CurrentKeys[key_code];
 }
 
-void Input::MousePosition(signedInt& x, signedInt& y) noexcept
+void Input::MousePosition(signedInt& x, signedInt& y) const noexcept
 {
 	x = mouseDeltaX;
 	y = mouseDeltaY;
