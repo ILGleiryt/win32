@@ -1,9 +1,9 @@
 #pragma once
 #include "MyTypes.h"
-
 #include "Win32Wrapper.h"
+
 #include <array>
-#include <iostream>
+
 
 struct KeyboardState {};
 enum ButtonState {};

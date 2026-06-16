@@ -1,7 +1,6 @@
 #include "Window.h"
-#include <iostream>
 
-void Window::FullScreen(bool set_fullscreen, bool borderless) 
+void Window::setFullScreen(bool set_fullscreen, bool borderless) 
 {
 	if (m_fullscreen == set_fullscreen) return;
 
@@ -13,20 +12,34 @@ void Window::FullScreen(bool set_fullscreen, bool borderless)
 		m_windowY = rc.top;
 		m_windowWidth = rc.right - rc.left;
 		m_windowHeight = rc.bottom - rc.top;
-		m_windowStyle = GetWindowLong(Get_Handle(), GWL_STYLE);
-		m_windowExStyle = GetWindowLong(Get_Handle(), GWL_EXSTYLE);
-		//SetWindowPos(Get_Handle(), nullptr, 0, 0, fullWidth, fullHeight, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
-		if (borderless)
+		m_windowStyle = static_cast<DWORD>(GetWindowLongPtr(Get_Handle(), GWL_STYLE));
+		m_windowExStyle = static_cast<DWORD>(GetWindowLongPtr(Get_Handle(), GWL_EXSTYLE));
+
+		if (borderless) //borderless fullscreen
 		{
-			int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-			int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-			SetWindowLongPtr(Get_Handle(), GWL_STYLE, WS_POPUP | WS_VISIBLE);
-			SetWindowLongPtr(Get_Handle(), GWL_EXSTYLE, WS_EX_APPWINDOW);
-			SetWindowPos(Get_Handle(), HWND_TOP, 0, 0, screenWidth, screenHeight,
-				SWP_FRAMECHANGED | SWP_SHOWWINDOW);
-			UpdateWindow(Get_Handle());
-			ShowWindow(Get_Handle(), SW_SHOW);
+			HMONITOR monitor = MonitorFromWindow(Get_Handle(), MONITOR_DEFAULTTONEAREST);
+			MONITORINFO mi{};
+			mi.cbSize = sizeof(MONITORINFO);
+
+			if (GetMonitorInfo(monitor, &mi))
+			{
+				int screenWidth = mi.rcMonitor.right - mi.rcMonitor.left;
+				int screenHeight = mi.rcMonitor.bottom - mi.rcMonitor.top;
+				int screenX = mi.rcMonitor.left;
+				int screenY = mi.rcMonitor.top;
+
+				SetWindowLongPtr(Get_Handle(), GWL_STYLE, WS_POPUP | WS_VISIBLE);
+				SetWindowLongPtr(Get_Handle(), GWL_EXSTYLE, WS_EX_APPWINDOW);
+				SetWindowPos(Get_Handle(), HWND_TOP,
+					screenX, screenY, screenWidth, screenHeight,
+					SWP_FRAMECHANGED | SWP_NOZORDER | SWP_SHOWWINDOW);
+				UpdateWindow(Get_Handle());
+			}
 		}
+		else {
+			ShowWindow(Get_Handle(), SW_MAXIMIZE);// windowed fullscreen
+		}
+
 		m_fullscreen = true;
 	}
 	else
@@ -36,6 +49,8 @@ void Window::FullScreen(bool set_fullscreen, bool borderless)
 		SetWindowPos(m_hwnd, nullptr, m_windowX, m_windowY,
 			m_windowWidth, m_windowHeight,
 			SWP_FRAMECHANGED | SWP_NOZORDER | SWP_SHOWWINDOW);
+		UpdateWindow(Get_Handle());
+
 		m_fullscreen = false;
 	}
 }
@@ -94,7 +109,6 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 
 		ShowWindow(m_hwnd, SW_SHOW);
 		UpdateWindow(m_hwnd);
-		//FullScreen(true, true);
 	}
 
 	Window::~Window() 
@@ -140,26 +154,32 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 			break;
 		case WM_DPICHANGED:
 		{
-			m_wndDPI = HIWORD(wParam);
+			m_wndDPI = HIWORD(wParam); 
 			float scale = m_wndDPI / USER_DEFAULT_SCREEN_DPI;
 			SizeWindow(hwnd, m_width, m_height, scale);
+			// maybe properly code this 
 			break;
 		}
 		case WM_KEYDOWN:
 			// onKeyPressed
+			// wparam - vk_code, lparam - previous state, 0 The previous key state. The value is 1 if the key is down before the message is sent, or it is zero if the key is up.
 			break;
 		case WM_KEYUP:
 			// onKeyReleased
 			break;
 		case WM_SYSKEYDOWN:
+			// command keys such as alt, shift, F1-12?
 			break;
 		case WM_SYSKEYUP:
+			// on syskey up
 			break;
 		case WM_DESTROY:
+			// WM_CLOSE doesnt need because app have only 0 window and after quit delete yourself
 			PostQuitMessage(0);
 			break;
 		case WM_SIZE:
 		{
+			// maybe add wm_sizing case? documentation on it so bad
 			UINT new_sizeW = LOWORD(lParam);
 			UINT new_sizeH = HIWORD(lParam);
 			float scale = m_wndDPI / USER_DEFAULT_SCREEN_DPI;
@@ -168,6 +188,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 			break;
 		}
 		case WM_ERASEBKGND:
+			// background repaint on sizing
 			return TRUE;
 		case WM_CHAR:
 			// onKeyChar
@@ -181,7 +202,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 	void Window::Resize(const signedInt width, const signedInt height)
 	{
 		if (m_fullscreen == true)
-			FullScreen(false, true);
+			setFullScreen(false, true);
 
 		ValidateWindowSize(width, height);
 		SizeWindow(m_hwnd, width, height, m_wndDPI);

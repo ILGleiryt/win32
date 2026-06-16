@@ -4,7 +4,6 @@
 #include <glad/gl.h>
 #include <glad/wgl.h>
 #pragma comment(lib, "opengl32.lib")
-
 class OpenGL
 {
 public:

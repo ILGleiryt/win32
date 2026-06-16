@@ -44,27 +44,14 @@ void Input::MousePosition(signedInt& x, signedInt& y) const noexcept
 
 bool Input::IsMouseKeyDown(signedInt button) const noexcept
 {
-	if (!GetSystemMetrics(SM_SWAPBUTTON))
+	bool swap = GetSystemMetrics(SM_SWAPBUTTON) != 0;
+	if (VK_LBUTTON)
 	{
-		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-		{
-			std::cout << "Left mouse";
-		}
-		if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
-		{
-			std::cout << "Right mouse";
-		}
+		return GetAsyncKeyState(swap ? VK_RBUTTON : VK_LBUTTON) & 0x8000;
 	}
-	else
+	else if(VK_RBUTTON)
 	{
-		if(GetAsyncKeyState(VK_RBUTTON) & 0x8000)
-		{
-			std::cout << "Left mouse";
-		}
-		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-		{
-			std::cout << "Right mouse";
-		}
+		return GetAsyncKeyState(swap ? VK_LBUTTON : VK_RBUTTON) & 0x8000;
 	}
 	return false;
 }

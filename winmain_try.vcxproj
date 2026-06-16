@@ -167,6 +167,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\Renderer.cpp" />
     <ClCompile Include="src\Opengl.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\gl.c" />
