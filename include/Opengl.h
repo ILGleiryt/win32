@@ -7,14 +7,17 @@
 class OpenGL
 {
 public:
-    OpenGL() : hglrc(nullptr), pixel_format(0) {};
+    OpenGL() : m_hglrc(nullptr), m_dc(nullptr), m_hwnd(nullptr) {};
     ~OpenGL() { Shutdown(); };
     bool Init(HWND hwnd) noexcept;
-    bool MakeCurrent(HWND hwnd) const noexcept;
-    void SwapBuffers(HWND hwnd) const noexcept;
+    bool MakeCurrent() const noexcept;
     void Shutdown() noexcept;
+    void SwapBuffers() const noexcept;
+    HDC GetHDC() const noexcept{ return m_dc; }
 private:
-    HGLRC hglrc{};
+    HWND m_hwnd;
+    HDC m_dc{};
+    HGLRC m_hglrc{};
     signedInt pixel_format{};
     static const PIXELFORMATDESCRIPTOR pfd;
 };

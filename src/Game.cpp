@@ -10,11 +10,11 @@ void Game::Run()
 	std::cout << "Renderer: " << renderer << std::endl;
 	std::cout << "Vendor: " << vendor << std::endl;
 
-	//if (!gl.MakeCurrent(m_window.Get_Handle()))
-	//{
-	//	std::cerr << "MakeCurrent failed!" << std::endl;
-	//	return;
-	//}
+	if (!m_gl.MakeCurrent())
+	{
+		std::cerr << "MakeCurrent failed!" << std::endl;
+		return;
+	}
 	
 	m_last_time = std::chrono::steady_clock::now();
 	while (running)

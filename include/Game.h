@@ -35,9 +35,9 @@ private:
 public:
 
 	Game(const winByte* wnd_title, const signedInt wnd_width, const signedInt wnd_height)
-		: m_gl(), m_window(wnd_title, wnd_width, wnd_height), m_renderer(&m_gl, &m_window)
+		: m_gl(), m_window(wnd_title, wnd_width, wnd_height), m_renderer(&m_gl)
 	{
-		//gl.Init(m_window.Get_Handle());
+		m_gl.Init(m_window.Get_Handle());
 	};
 	~Game() = default;
 	void Run();
