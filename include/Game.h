@@ -13,7 +13,8 @@
 // - TODO  X11 linux api, xlib | xcb(async new)
 // - TODO Create Opengl abstarction for create windows/linux context
 // - INPUT.h TODO >> Delete all GetAsyncKey and catch user input in window procedure in Windod.cpp
-// WM_KEYDOWN e.g Input singleton??
+// WM_KEYDOWN etc Input singleton??
+// - TODO Make math library for vectors with operators + - = etc.
  
 enum struct GameState
 {

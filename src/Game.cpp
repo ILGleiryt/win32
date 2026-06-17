@@ -1,14 +1,15 @@
 #include "Game.h"
+#include <math/math.h>
 
 void Game::Run()
 {
-	const Byte* version = (const Byte*)glGetString(GL_VERSION);
-	const Byte* renderer = (const Byte*)glGetString(GL_RENDERER);
-	const Byte* vendor = (const Byte*)glGetString(GL_VENDOR);
-
-	std::cout << "OpenGL version: " << version << std::endl;
-	std::cout << "Renderer: " << renderer << std::endl;
-	std::cout << "Vendor: " << vendor << std::endl;
+	Vector3 a = Vector3(1.f, 3.f, 5.f);
+	Vector3 b = Vector3(13.f,3.f, 5.f);
+	Vector3 c = a + b;
+	std::cout << b;
+	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+	std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
 
 	if (!m_gl.MakeCurrent())
 	{
