@@ -14,11 +14,13 @@ void Input::Update() noexcept
 	newX = mouse.x;
 	newY = mouse.y;
 
-	mouseDeltaX = newX - mouse_PosX;
-	mouseDeltaY = newY - mouse_PosY;
+	//mouseDeltaX = newX - mouse_PosX;
+	//mouseDeltaY = newY - mouse_PosY;
+	MouseDelta(newX, newY);
 	mouse_PosX = newX;
 	mouse_PosY = newY;
-	MousePosition(mouse_PosX, mouse_PosY);
+	ResetDelta();
+
 }
 
 signedInt Input::IsKeyPressed(unsignedByte key_code) const noexcept
@@ -36,10 +38,16 @@ signedInt Input::IsKeyDown(unsignedByte key_code) const noexcept
 	return CurrentKeys[key_code];
 }
 
-void Input::MousePosition(signedInt& x, signedInt& y) const noexcept
+void Input::ResetDelta() noexcept
 {
-	x = mouseDeltaX;
-	y = mouseDeltaY;
+	mouseDeltaX = 0;
+	mouseDeltaY = 0;
+}
+
+void Input::MouseDelta(signedInt& x, signedInt& y) noexcept
+{
+	mouseDeltaX = x - mouse_PosX;
+	mouseDeltaY = y - mouse_PosY;
 }
 
 bool Input::IsMouseKeyDown(signedInt button) const noexcept

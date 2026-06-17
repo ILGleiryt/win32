@@ -16,8 +16,9 @@ public:
 	signedInt IsKeyPressed(unsignedByte key_code) const noexcept;
 	signedInt IsKeyReleased(unsignedByte key_code) const noexcept;
 	signedInt IsKeyDown(unsignedByte key_code) const noexcept;
-	void MousePosition(signedInt& x, signedInt& y) const noexcept;
+	void MouseDelta(signedInt& x, signedInt& y) noexcept;
 	bool IsMouseKeyDown(signedInt button) const noexcept;
+	void ResetDelta() noexcept;
 
 private:
 	std::array<bool, 256> CurrentKeys{};

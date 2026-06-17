@@ -1,4 +1,3 @@
-// use directx instead for easy development
 #include "Game.h"
 
 int main()
