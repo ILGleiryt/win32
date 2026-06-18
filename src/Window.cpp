@@ -1,6 +1,6 @@
 #include "Window.h"
 
-void Window::setFullScreen(bool set_fullscreen, bool borderless) 
+void Window::setFullScreen(bool set_fullscreen, bool borderless) noexcept
 {
 	if (m_fullscreen == set_fullscreen) return;
 
@@ -55,7 +55,7 @@ void Window::setFullScreen(bool set_fullscreen, bool borderless)
 	}
 }
 
-void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight, float scale)
+void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight, float scale) noexcept
 {
 	signedInt physicWidth{ static_cast<signedInt>(clientWidth * scale) };
 	signedInt physicHeight{ static_cast<signedInt>(clientHeight * scale) };
@@ -89,7 +89,11 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		wc.cbWndExtra = 0;
 		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
-		if (!RegisterClassExW(&wc)) throw std::runtime_error("Class creation error");
+		if (!RegisterClassExW(&wc))
+		{
+			MessageBoxExW(m_hwnd, L"Window doesnt create", L"Window create error", MB_OKCANCEL, 0);
+			exit(-1);
+		}
 
 		m_wndDPI = GetDPI_X();
 		int physicWidth = static_cast<int>(wnd_width * m_wndDPI);
@@ -103,8 +107,9 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, m_windowStyle,
 			CW_USEDEFAULT, CW_USEDEFAULT, windowWidth, windowHeight,
 			nullptr, nullptr, GetInstance(), this); !m_hwnd)
-		{
-			throw std::runtime_error("Error on window creation");
+		{ 
+			MessageBoxExW(m_hwnd, L"Window doesnt create", L"Window create error", MB_OKCANCEL, 0);
+			exit(-1);
 		}
 
 		ShowWindow(m_hwnd, SW_SHOW);
@@ -117,10 +122,10 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		UnregisterClassW(GetName(), GetInstance());
 	};
 
-	void Window::ValidateWindowSize(const signedInt wnd_width, const signedInt wnd_height) const
+	void Window::ValidateWindowSize(const signedInt wnd_width, const signedInt wnd_height) const noexcept
 	{
 		if (wnd_height <= 0 || wnd_width <= 0)
-			throw std::invalid_argument("Bad window size");
+			MessageBoxExW(m_hwnd, L"Wrong window size", L"window size error", MB_OKCANCEL, 0);
 	}
 
 	LRESULT Window::MyWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -199,7 +204,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		return 0;
 	}
 
-	void Window::Resize(const signedInt width, const signedInt height)
+	void Window::Resize(const signedInt width, const signedInt height) noexcept
 	{
 		if (m_fullscreen == true)
 			setFullScreen(false, true);

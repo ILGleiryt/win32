@@ -1,28 +1,23 @@
 #include <math/Vector4.h>
 
-Vector4::Vector4() : x(0.f), y(0.f), z(0.f), w(0.f) {}
-
-Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
-{}
-
 Vector4 operator+(Vector4 left, const Vector4& right)
 {
-    return left.add(right);
+    return left += right;
 }
 
 Vector4 operator-(Vector4 left, const Vector4& right)
 {
-    return left.substract(right);
+    return left -= right;
 }
 
 Vector4 operator*(Vector4 left, const Vector4& right)
 {
-    return left.multiply(right);
+    return left *= right;
 }
 
 Vector4 operator/(Vector4 left, const Vector4& right)
 {
-    return left.divide(right);
+    return left /= right;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector4& vec)
@@ -31,8 +26,18 @@ std::ostream& operator<<(std::ostream& os, const Vector4& vec)
     return os;
 }
 
+bool Vector4::operator==(const Vector4& other)
+{
+    return this->x == other.x && this->y == other.y
+        && this->z == other.z && this->w == other.z;
+}
 
-Vector4& Vector4::add(const Vector4& other)
+bool Vector4::operator!=(const Vector4& other)
+{
+    return !(*this == other);
+}
+
+Vector4& Vector4::operator+=(const Vector4& other)
 {
     x += other.x;
     y += other.y;
@@ -42,7 +47,7 @@ Vector4& Vector4::add(const Vector4& other)
     return *this;
 }
 
-Vector4& Vector4::substract(const Vector4& other)
+Vector4& Vector4::operator-=(const Vector4& other)
 {
     x -= other.x;
     y -= other.y;
@@ -52,17 +57,7 @@ Vector4& Vector4::substract(const Vector4& other)
     return *this;
 }
 
-Vector4& Vector4::multiply(const Vector4& other)
-{
-    x *= other.x;
-    y *= other.y;
-    z *= other.z;
-    w *= other.w;
-
-    return *this;
-}
-
-Vector4& Vector4::divide(const Vector4& other)
+Vector4& Vector4::operator/=(const Vector4& other)
 {
     x /= other.x;
     y /= other.y;
@@ -72,43 +67,17 @@ Vector4& Vector4::divide(const Vector4& other)
     return *this;
 }
 
-bool Vector4::operator==(const Vector4& obj)
+Vector4 Vector4::operator-() const
 {
-    return this->x == obj.x && this->y == obj.y 
-        && this->z == obj.z && this->w == obj.z;
-}
-
-bool Vector4::operator!=(const Vector4& obj)
-{
-    return !(*this == obj);
-}
-
-Vector4& Vector4::operator+=(const Vector4& other)
-{
-    return add(other);
-}
-
-Vector4& Vector4::operator-=(const Vector4& other)
-{
-    return substract(other);
-}
-
-Vector4& Vector4::operator/=(const Vector4& other)
-{
-    return divide(other);
+    return Vector4(-x, -y, -z, -w);
 }
 
 Vector4& Vector4::operator*=(const Vector4& other)
 {
-    return multiply(other);
-}
+    x *= other.x;
+    y *= other.y;
+    z *= other.z;
+    w *= other.w;
 
-Vector4 Vector4::Zero()
-{
-    return Vector4(0.f, 0.f, 0.f, 0.f);
-}
-
-Vector4 Vector4::One()
-{
-    return Vector4(1.f, 1.f, 1.f, 1.f);
+    return *this;
 }

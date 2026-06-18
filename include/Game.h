@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include <chrono>
-#include <thread>
 
 // - TODO OpenglRender, GUI, Physics(aabb and windows corner), mouse movement with GetKeyPos and getclientrect
 // - TODO Window -> windows_abs.h && Window -> linux_abs.h

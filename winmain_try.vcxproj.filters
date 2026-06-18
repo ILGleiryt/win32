@@ -34,6 +34,12 @@
     <Filter Include="Header Files\3rdParty">
       <UniqueIdentifier>{8ce9a4a8-c034-4381-b56f-1a271dd1249f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{eb194a90-a457-403f-9812-e6484895b2f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{21afd916-09f7-4618-a98d-c4d618011b32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -61,13 +67,13 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Vector2.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="src\Vector3.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="src\Vector4.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,17 +107,17 @@
     <ClInclude Include="include\KHR\khrplatform.h">
       <Filter>Header Files\3rdParty</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\Vector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\math\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\math\Vector2.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
     <ClInclude Include="include\math\Vector3.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\Vector4.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

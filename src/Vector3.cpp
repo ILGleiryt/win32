@@ -2,22 +2,22 @@
 
 Vector3 operator+(Vector3 left, const Vector3& right)
 {
-    return left.add(right);
+    return left += right;
 }
 
 Vector3 operator-(Vector3 left, const Vector3& right)
 {
-    return left.substract(right);
+    return left -= right;
 }
 
 Vector3 operator*(Vector3 left, const Vector3& right)
 {
-    return left.multiply(right);
+    return left *= right;
 }
 
 Vector3 operator/(Vector3 left, const Vector3& right)
 {
-    return left.divide(right);
+    return left /= right;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector3& vec)
@@ -26,12 +26,7 @@ std::ostream& operator<<(std::ostream& os, const Vector3& vec)
     return os;
 }
 
-Vector3::Vector3() : x(0.f), y(0.f), z(0.f) {}
-
-Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z)
-{}
-
-Vector3& Vector3::add(const Vector3 & other)
+Vector3& Vector3::operator+=(const Vector3& other)
 {
     x += other.x;
     y += other.y;
@@ -40,7 +35,7 @@ Vector3& Vector3::add(const Vector3 & other)
     return *this;
 }
 
-Vector3& Vector3::substract(const Vector3& other)
+Vector3& Vector3::operator-=(const Vector3& other)
 {
     x -= other.x;
     y -= other.y;
@@ -49,16 +44,7 @@ Vector3& Vector3::substract(const Vector3& other)
     return *this;
 }
 
-Vector3& Vector3::multiply(const Vector3& other)
-{
-    x *= other.x;
-    y *= other.y;
-    z *= other.z;
-
-    return *this;
-}
-
-Vector3& Vector3::divide(const Vector3& other)
+Vector3& Vector3::operator/=(const Vector3& other)
 {
     x /= other.x;
     y /= other.y;
@@ -67,42 +53,26 @@ Vector3& Vector3::divide(const Vector3& other)
     return *this;
 }
 
-bool Vector3::operator==(const Vector3& obj)
+Vector3 Vector3::operator-() const
 {
-    return this->x == obj.x && this->y == obj.y && this->z == obj.z;
-}
-
-bool Vector3::operator!=(const Vector3& obj)
-{
-    return !(*this == obj);
-}
-
-Vector3& Vector3::operator+=(const Vector3& other)
-{
-    return add(other);
-}
-
-Vector3& Vector3::operator-=(const Vector3& other)
-{
-    return substract(other);
-}
-
-Vector3& Vector3::operator/=(const Vector3& other)
-{
-    return divide(other);
+    return Vector3(-x, -y, -z);
 }
 
 Vector3& Vector3::operator*=(const Vector3& other)
 {
-    return multiply(other);
+    x *= other.x;
+    y *= other.y;
+    z *= other.z;
+
+    return *this;
 }
 
-Vector3 Vector3::Zero()
+bool Vector3::operator==(const Vector3 & other) const
 {
-    return Vector3(0.f, 0.f, 0.f);
+    return this->x == other.x && this->y == other.y && this->z == other.z;
 }
 
-Vector3 Vector3::One()
+bool Vector3::operator!=(const Vector3& other) const
 {
-    return Vector3(1.f, 1.f, 1.f);
+    return !(*this == other);
 }
