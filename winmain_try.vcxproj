@@ -139,7 +139,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)dependencies;$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,7 +164,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)dependencies;$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,33 +176,33 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Vector4.cpp" />
-    <ClCompile Include="src\Vector3.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\Vector2.cpp" />
-    <ClCompile Include="src\Opengl.cpp" />
-    <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\gl.c" />
-    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Math\Vector4.cpp" />
+    <ClCompile Include="src\Math\Vector3.cpp" />
+    <ClCompile Include="src\Core\Renderer.cpp" />
+    <ClCompile Include="src\Math\Vector2.cpp" />
+    <ClCompile Include="src\Graphics\Opengl.cpp" />
+    <ClCompile Include="src\Core\Game.cpp" />
+    <ClCompile Include="dependencies\glad\src\gl.c" />
+    <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\glad\gl.h" />
-    <ClInclude Include="include\glad\wgl.h" />
-    <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="include\core\Game.h" />
+    <ClInclude Include="dependencies\glad\gl.h" />
+    <ClInclude Include="dependencies\glad\wgl.h" />
+    <ClInclude Include="include\core\Input.h" />
+    <ClInclude Include="dependencies\KHR\khrplatform.h" />
     <ClInclude Include="include\math\math.h" />
-    <ClInclude Include="include\math\Vector3.h" />
-    <ClInclude Include="include\math\Vector4.h" />
-    <ClInclude Include="include\MyTypes.h" />
-    <ClInclude Include="include\Opengl.h" />
-    <ClInclude Include="include\Renderer.h" />
-    <ClCompile Include="src\wgl.c" />
-    <ClCompile Include="src\Window.cpp" />
-    <ClInclude Include="include\math\Vector2.h" />
-    <ClInclude Include="include\Win32Wrapper.h" />
-    <ClInclude Include="include\Window.h" />
+    <ClInclude Include="include\math\Vectors\Vector3.h" />
+    <ClInclude Include="include\math\Vectors\Vector4.h" />
+    <ClInclude Include="include\utility\MyTypes.h" />
+    <ClInclude Include="include\graphics\Opengl.h" />
+    <ClInclude Include="include\core\Renderer.h" />
+    <ClCompile Include="dependencies\glad\src\wgl.c" />
+    <ClCompile Include="src\Platform\Window.cpp" />
+    <ClInclude Include="include\math\Vectors\Vector2.h" />
+    <ClInclude Include="include\utility\Win32Wrapper.h" />
+    <ClInclude Include="include\platform\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

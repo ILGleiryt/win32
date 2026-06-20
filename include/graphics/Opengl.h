@@ -1,8 +1,8 @@
 #pragma once
-#include "MyTypes.h"
+#include "utility/MyTypes.h"
 
-#include <glad/gl.h>
-#include <glad/wgl.h>
+#include "glad/gl.h"
+#include "glad/wgl.h"
 #pragma comment(lib, "opengl32.lib")
 class OpenGL
 {

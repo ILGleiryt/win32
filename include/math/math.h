@@ -1,4 +1,4 @@
 #pragma once
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Vectors/Vector2.h"
+#include "Vectors/Vector3.h"
+#include "Vectors/Vector4.h"

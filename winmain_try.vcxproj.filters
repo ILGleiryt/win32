@@ -40,84 +40,93 @@
     <Filter Include="Source Files\math">
       <UniqueIdentifier>{21afd916-09f7-4618-a98d-c4d618011b32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{519d1c1b-acc6-45d8-8aaf-0cccfa4e9250}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{bcfcd5ae-5b23-4f8d-a8d3-156042a1369d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utilities">
+      <UniqueIdentifier>{bac2a2c5-06f1-43cc-8be8-eebdb0d43292}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game.cpp">
+    <ClCompile Include="src\Core\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window.cpp">
+    <ClCompile Include="src\Platform\Window.cpp">
       <Filter>Source Files\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\gl.c">
+    <ClCompile Include="dependencies\glad\src\gl.c">
       <Filter>Source Files\3rdParty</Filter>
     </ClCompile>
-    <ClCompile Include="src\wgl.c">
+    <ClCompile Include="dependencies\glad\src\wgl.c">
       <Filter>Source Files\3rdParty</Filter>
     </ClCompile>
-    <ClCompile Include="src\Input.cpp">
+    <ClCompile Include="src\Core\Input.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\Opengl.cpp">
+    <ClCompile Include="src\Graphics\Opengl.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
+    <ClCompile Include="src\Core\Renderer.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vector2.cpp">
+    <ClCompile Include="src\Math\Vector2.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vector3.cpp">
+    <ClCompile Include="src\Math\Vector3.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vector4.cpp">
+    <ClCompile Include="src\Math\Vector4.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Win32Wrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MyTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Opengl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\glad\gl.h">
+    <ClInclude Include="dependencies\glad\gl.h">
       <Filter>Header Files\3rdParty</Filter>
     </ClInclude>
-    <ClInclude Include="include\glad\wgl.h">
+    <ClInclude Include="dependencies\glad\wgl.h">
       <Filter>Header Files\3rdParty</Filter>
     </ClInclude>
-    <ClInclude Include="include\KHR\khrplatform.h">
+    <ClInclude Include="dependencies\KHR\khrplatform.h">
       <Filter>Header Files\3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\Vectors\Vector2.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\Vectors\Vector3.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\Vectors\Vector4.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\math\Vector2.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\Vector3.h">
-      <Filter>Header Files\math</Filter>
+    <ClInclude Include="include\core\Game.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\Vector4.h">
-      <Filter>Header Files\math</Filter>
+    <ClInclude Include="include\core\Renderer.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\platform\Window.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\Input.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\Opengl.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\MyTypes.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\Win32Wrapper.h">
+      <Filter>Header Files\utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

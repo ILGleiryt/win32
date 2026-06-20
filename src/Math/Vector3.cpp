@@ -1,4 +1,4 @@
-#include <math/Vector3.h>
+#include <math/Vectors/Vector3.h>
 
 Vector3 operator+(Vector3 left, const Vector3& right)
 {

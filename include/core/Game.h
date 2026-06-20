@@ -1,8 +1,8 @@
 #pragma once
-#include "Opengl.h"
-#include "Input.h"
-#include "Window.h"
-#include "Renderer.h"
+#include "graphics/Opengl.h"
+#include "core/Input.h"
+#include "core/Renderer.h"
+#include "platform/Window.h"
 #include <iostream>
 
 #include <chrono>

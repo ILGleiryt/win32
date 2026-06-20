@@ -1,4 +1,4 @@
-#include <math/Vector2.h>
+#include <math/Vectors/Vector2.h>
 
 Vector2 operator+(Vector2 left, const Vector2& other)
 {

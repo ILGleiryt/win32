@@ -14,5 +14,5 @@ using unsignedBigInt = std::uint64_t; //uns long
 using String = std::string;
 using Byte = char; //-128 - 127
 using unsignedByte = std::uint8_t; // 0 - 256
-using winByte = wchar_t; // from 1 byte to ..(2?) bytes per symbol? 
+using winByte = wchar_t; // from 1 byte to 4 bytes on some platform!!! per symbol
 //strings and symbols end

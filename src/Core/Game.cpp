@@ -1,14 +1,9 @@
-#include "Game.h"
+#include "core/Game.h"
 #include <math/math.h>
+
 
 void Game::Run()
 {
-	Vector2 a = -Vector2(1.f, 3.f);
-	Vector3 b = Vector3(13.f,3.f, 5.f);
-	Vector3 c = Vector3(1.f, 1.f, 0.f) + b;
-	Vector4 d = Vector4::Zero();
-	std::cout << c << "\n" << d;
-
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;

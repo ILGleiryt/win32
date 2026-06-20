@@ -1,5 +1,5 @@
 #pragma once
-#include "Opengl.h"
+#include "graphics/Opengl.h"
 
 class Renderer
 {

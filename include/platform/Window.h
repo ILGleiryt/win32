@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Win32Wrapper.h"
-#include "MyTypes.h"
+#include "utility/Win32Wrapper.h"
+#include "utility/MyTypes.h"
 
 #include <stdexcept>
 

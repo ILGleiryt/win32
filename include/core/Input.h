@@ -1,6 +1,6 @@
 #pragma once
-#include "MyTypes.h"
-#include "Win32Wrapper.h"
+#include "utility/MyTypes.h"
+#include "utility/Win32Wrapper.h"
 
 #include <array>
 

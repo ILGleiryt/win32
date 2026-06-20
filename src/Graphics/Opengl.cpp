@@ -1,4 +1,4 @@
-#include "Opengl.h"
+#include "graphics/Opengl.h"
 
 //Glad doesnt load these 
 #ifndef WGL_CONTEXT_MAJOR_VERSION_ARB
