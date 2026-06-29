@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "platform/Window.h"
 
 void Window::setFullScreen(bool set_fullscreen, bool borderless) noexcept
 {
@@ -36,7 +36,8 @@ void Window::setFullScreen(bool set_fullscreen, bool borderless) noexcept
 				UpdateWindow(Get_Handle());
 			}
 		}
-		else {
+		else 
+		{
 			ShowWindow(Get_Handle(), SW_MAXIMIZE);// windowed fullscreen
 		}
 
@@ -46,7 +47,7 @@ void Window::setFullScreen(bool set_fullscreen, bool borderless) noexcept
 	{
 		SetWindowLongPtr(m_hwnd, GWL_STYLE, m_windowStyle);
 		SetWindowLongPtr(m_hwnd, GWL_EXSTYLE, m_windowExStyle);
-		SetWindowPos(m_hwnd, nullptr, m_windowX, m_windowY,
+		SetWindowPos(m_hwnd, NULL, m_windowX, m_windowY,
 			m_windowWidth, m_windowHeight,
 			SWP_FRAMECHANGED | SWP_NOZORDER | SWP_SHOWWINDOW);
 		UpdateWindow(Get_Handle());
@@ -55,36 +56,36 @@ void Window::setFullScreen(bool set_fullscreen, bool borderless) noexcept
 	}
 }
 
-void Window::SizeWindow(HWND hwnd, signedInt clientWidth, signedInt clientHeight, float scale) noexcept
+void Window::SizeWindow(HWND hwnd, int clientWidth, int clientHeight, float scale) noexcept
 {
-	signedInt physicWidth{ static_cast<signedInt>(clientWidth * scale) };
-	signedInt physicHeight{ static_cast<signedInt>(clientHeight * scale) };
+	int physicWidth{ static_cast<int>(clientWidth * scale) };
+	int physicHeight{ static_cast<int>(clientHeight * scale) };
 	ValidateWindowSize(physicWidth, physicHeight);
 	RECT rc = { 0, 0, physicWidth, physicHeight };
 	DWORD style = static_cast<DWORD>(GetWindowLongPtr(hwnd, GWL_STYLE));
 	DWORD exStyle = static_cast<DWORD>(GetWindowLongPtr(hwnd, GWL_EXSTYLE));
 	AdjustWindowRectEx(&rc, style, FALSE, exStyle);
-	signedInt fullWidth = rc.right - rc.left;
-	signedInt fullHeight = rc.bottom - rc.top;
-	SetWindowPos(hwnd, nullptr, 0, 0, fullWidth, fullHeight, SWP_NOMOVE | SWP_NOZORDER);
+	int fullWidth = rc.right - rc.left;
+	int fullHeight = rc.bottom - rc.top;
+	SetWindowPos(hwnd, NULL, 0, 0, fullWidth, fullHeight, SWP_NOMOVE | SWP_NOZORDER);
 }
 
-Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_height)
-	: m_width(wnd_width), m_height(wnd_height), hinstance(GetModuleHandleW(nullptr))
+Window::Window(const wchar_t* wnd_title, int wnd_width, int wnd_height)
+	: m_width(wnd_width), m_height(wnd_height), hinstance(GetModuleHandleW(NULL))
 	{
 		SetProcessDPIAware();
 		ValidateWindowSize(wnd_width, wnd_height);
 
-		WNDCLASSEX wc{ 0 };
+		WNDCLASSEX wc = {0};
 		wc.hInstance = GetInstance();
 		wc.lpszClassName = GetName();
 		wc.lpfnWndProc = MyWndProc;
 		wc.cbSize = sizeof(WNDCLASSEX);
-		wc.style = CS_HREDRAW | CS_VREDRAW;
-		wc.hCursor = nullptr;
-		wc.hIcon = nullptr;
-		wc.hIconSm = nullptr;
-		wc.lpszMenuName = nullptr;
+		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; // cs_owndc maybe dont needed, but before windows nt windows use 1 dc for all user windows, is not problem today
+		wc.hCursor = NULL;
+		wc.hIcon = NULL;
+		wc.hIconSm = NULL;
+		wc.lpszMenuName = NULL;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -106,7 +107,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 
 		if (m_hwnd = CreateWindowExW(0, GetName(), wnd_title, m_windowStyle,
 			CW_USEDEFAULT, CW_USEDEFAULT, windowWidth, windowHeight,
-			nullptr, nullptr, GetInstance(), this); !m_hwnd)
+			NULL, NULL, GetInstance(), this); !m_hwnd)
 		{ 
 			MessageBoxExW(m_hwnd, L"Window doesnt create", L"Window create error", MB_OKCANCEL, 0);
 			exit(-1);
@@ -122,7 +123,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		UnregisterClassW(GetName(), GetInstance());
 	};
 
-	void Window::ValidateWindowSize(const signedInt wnd_width, const signedInt wnd_height) const noexcept
+	void Window::ValidateWindowSize(const int wnd_width, const int wnd_height) const noexcept
 	{
 		if (wnd_height <= 0 || wnd_width <= 0)
 			MessageBoxExW(m_hwnd, L"Wrong window size", L"window size error", MB_OKCANCEL, 0);
@@ -130,7 +131,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 
 	LRESULT Window::MyWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		Window* pWindow{ nullptr };
+		Window* pWindow{ NULL };
 
 		if (message == WM_NCCREATE)
 		{
@@ -156,6 +157,9 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 			break;
 		case WM_ACTIVATE:
 			// if game active get 100% to render it, otherwise only minimal fps 
+			break;
+		case WM_ACTIVATEAPP:
+			// same as activate, but need check documentation
 			break;
 		case WM_DPICHANGED:
 		{
@@ -185,11 +189,11 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		case WM_SIZE:
 		{
 			// maybe add wm_sizing case? documentation on it so bad
-			UINT new_sizeW = LOWORD(lParam);
-			UINT new_sizeH = HIWORD(lParam);
+			UINT new_width = LOWORD(lParam);
+			UINT new_height = HIWORD(lParam);
 			float scale = m_wndDPI / USER_DEFAULT_SCREEN_DPI;
-			m_width = static_cast<signedInt>(new_sizeW / scale);
-			m_height = static_cast<signedInt>(new_sizeH / scale);
+			m_width = static_cast<int>(new_width / scale);
+			m_height = static_cast<int>(new_height / scale);
 			break;
 		}
 		case WM_ERASEBKGND:
@@ -198,13 +202,16 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 		case WM_CHAR:
 			// onKeyChar
 			break;
+		case WM_CLOSE: //send when app is should destroy, before hwnd and dc deleted for properly closing
+			//mb put here callback for delete opengl context
+			break;
 		default:
 			return DefWindowProcW(hwnd, message, wParam, lParam);
 		}
 		return 0;
 	}
 
-	void Window::Resize(const signedInt width, const signedInt height) noexcept
+	void Window::Resize(const int width, const int height) noexcept
 	{
 		if (m_fullscreen == true)
 			setFullScreen(false, true);
@@ -218,7 +225,7 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 	bool Window::ProcessSystemMessages() noexcept
 	{
 		MSG message;
-		while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
+		while (PeekMessageW(&message, NULL, 0, 0, PM_REMOVE))
 		{
 			if (message.message == WM_QUIT)
 				return false;
@@ -231,9 +238,9 @@ Window::Window(const winByte* wnd_title, signedInt wnd_width, signedInt wnd_heig
 
 	float Window::GetDPI_X() noexcept
 	{
-		HDC hdc = GetDC(nullptr);
+		HDC hdc = GetDC(NULL);
 		int dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
-		ReleaseDC(nullptr, hdc);
+		ReleaseDC(NULL, hdc);
 		float scaleX = dpiX / static_cast<float>(USER_DEFAULT_SCREEN_DPI);
 		return scaleX;
 	}

@@ -4,11 +4,11 @@
 void Input::Update() noexcept
 {
 	PreviousKeys = CurrentKeys;
-	for (signedTinyInt i = 0; i < CurrentKeys.size(); ++i) {
-		CurrentKeys[i] = (GetAsyncKeyState(static_cast<signedTinyInt>(i)) & 0x8000) != 0; // delete async code
+	for (int i = 0; i < CurrentKeys.size(); ++i) {
+		CurrentKeys[i] = (GetAsyncKeyState(static_cast<int>(i)) & 0x8000) != 0; // delete async code
 	}
 
-	signedInt newX, newY; //local variables for mouse pos
+	int newX, newY; //local variables for mouse pos
 	POINT mouse;
 	GetCursorPos(&mouse);
 	newX = mouse.x;
@@ -21,17 +21,17 @@ void Input::Update() noexcept
 
 }
 
-signedInt Input::IsKeyPressed(unsignedByte key_code) const noexcept // delete
+int Input::IsKeyPressed(int key_code) const noexcept // delete
 {
 	return (CurrentKeys[key_code] && !PreviousKeys[key_code]);
 }
 
-signedInt Input::IsKeyReleased(unsignedByte key_code) const noexcept // delete
+int Input::IsKeyReleased(int key_code) const noexcept // delete
 {
 	return (!CurrentKeys[key_code] && PreviousKeys[key_code]);
 }
 
-signedInt Input::IsKeyDown(unsignedByte key_code) const noexcept //delete
+int Input::IsKeyDown(int key_code) const noexcept //delete
 {
 	return CurrentKeys[key_code];
 }
@@ -42,16 +42,16 @@ void Input::ResetDelta() noexcept
 	mouseDeltaY = 0;
 }
 
-void Input::MouseDelta(signedInt& x, signedInt& y) noexcept
+void Input::MouseDelta(int& x, int& y) noexcept
 {
 	mouseDeltaX = x - mouse_PosX;
 	mouseDeltaY = y - mouse_PosY;
 }
 
-bool Input::IsMouseKeyDown(signedInt button) const noexcept // delete?
+bool Input::IsMouseKeyDown(char button) const noexcept // delete?
 {
 	bool swap = GetSystemMetrics(SM_SWAPBUTTON) != 0;
-	if (VK_LBUTTON)
+	if (button == VK_LBUTTON)
 	{
 		return GetAsyncKeyState(swap ? VK_RBUTTON : VK_LBUTTON) & 0x8000;
 	}

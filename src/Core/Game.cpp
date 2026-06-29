@@ -1,16 +1,35 @@
+#include <stdio.h>
 #include "core/Game.h"
 #include <math/math.h>
 
+Game::Game(const wchar_t* wnd_title, const int wnd_width, const int wnd_height)
+	: m_window(wnd_title, wnd_width, wnd_height),
+	m_renderer(&m_gl)
+{
+	if (!gl_init(&m_gl, m_window.Get_Handle()))
+	{
+		printf("Failed to initialize OpenGL!\n");
+		running = false;
+		return;
+	}
+	glViewport(0, 0, wnd_width, wnd_height);
+	running = true;
+}
+
+Game::~Game()
+{
+	Shutdown();
+}
 
 void Game::Run()
 {
-	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-	std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+	printf("Renderer: %s\n", glGetString(GL_RENDERER));
+	printf("Vendor: %s\n", glGetString(GL_VENDOR));
 
-	if (!m_gl.MakeCurrent())
+	if (!gl_make_current(&m_gl))
 	{
-		std::cerr << "MakeCurrent failed!" << std::endl;
+		printf("MakeCurrent failed!\n");
 		return;
 	}
 	
@@ -35,14 +54,19 @@ void Game::Run()
 		}
 		if (m_input.IsMouseKeyDown(MK_LBUTTON))
 		{
-			std::cout << "left mouse clicked";
+			printf("left mouse clicked\n");
 		}
 		if (m_input.IsMouseKeyDown(MK_RBUTTON))
 		{
-			std::cout << "right mouse clicked";
+			printf("right mouse clicked\n");
 		}
 
 		m_renderer.Update(dt);
 		m_renderer.Render();
 	}
+}
+
+void Game::Shutdown()
+{
+	running = false;
 }

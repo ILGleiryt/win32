@@ -20,11 +20,6 @@ Vector2 operator*(Vector2 left, float scalar)
 	return left *= scalar;
 }
 
-Vector2 operator*(float scalar, Vector2 right)
-{
-	return right *= scalar;
-}
-
 Vector2 operator/(Vector2 left, const Vector2& other)
 {
 	return left /= other;

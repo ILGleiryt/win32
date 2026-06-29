@@ -15,6 +15,11 @@ Vector4 operator*(Vector4 left, const Vector4& right)
     return left *= right;
 }
 
+Vector4 operator*(Vector4 left, const float scalar)
+{
+    return left *= scalar;
+}
+
 Vector4 operator/(Vector4 left, const Vector4& right)
 {
     return left /= right;

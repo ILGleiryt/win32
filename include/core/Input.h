@@ -13,16 +13,16 @@ class Input
 public:
 	void Update() noexcept;
 
-	signedInt IsKeyPressed(unsignedByte key_code) const noexcept;
-	signedInt IsKeyReleased(unsignedByte key_code) const noexcept;
-	signedInt IsKeyDown(unsignedByte key_code) const noexcept;
-	void MouseDelta(signedInt& x, signedInt& y) noexcept;
-	bool IsMouseKeyDown(signedInt button) const noexcept;
+	int IsKeyPressed(int key_code) const noexcept;
+	int IsKeyReleased(int key_code) const noexcept;
+	int IsKeyDown(int key_code) const noexcept;
+	void MouseDelta(int& x, int& y) noexcept;
+	bool IsMouseKeyDown(char button) const noexcept;
 	void ResetDelta() noexcept;
 
 private:
 	std::array<bool, 256> CurrentKeys{};
 	std::array<bool, 256> PreviousKeys{};
-	signedInt mouse_PosX{}, mouse_PosY{};
-	signedInt mouseDeltaX{}, mouseDeltaY{};
+	int mouse_PosX{}, mouse_PosY{};
+	int mouseDeltaX{}, mouseDeltaY{};
 };

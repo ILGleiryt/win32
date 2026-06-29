@@ -159,7 +159,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -176,14 +176,14 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Math\Vector4.cpp" />
-    <ClCompile Include="src\Math\Vector3.cpp" />
-    <ClCompile Include="src\Core\Renderer.cpp" />
-    <ClCompile Include="src\Math\Vector2.cpp" />
-    <ClCompile Include="src\Graphics\Opengl.cpp" />
-    <ClCompile Include="src\Core\Game.cpp" />
+    <ClCompile Include="src\math\Vector4.cpp" />
+    <ClCompile Include="src\math\Vector3.cpp" />
+    <ClCompile Include="src\core\Renderer.cpp" />
+    <ClCompile Include="src\math\Vector2.cpp" />
+    <ClCompile Include="src\graphics\Opengl.c" />
+    <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="dependencies\glad\src\gl.c" />
-    <ClCompile Include="src\Core\Input.cpp" />
+    <ClCompile Include="src\core\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -199,7 +199,7 @@
     <ClInclude Include="include\graphics\Opengl.h" />
     <ClInclude Include="include\core\Renderer.h" />
     <ClCompile Include="dependencies\glad\src\wgl.c" />
-    <ClCompile Include="src\Platform\Window.cpp" />
+    <ClCompile Include="src\platform\Window.cpp" />
     <ClInclude Include="include\math\Vectors\Vector2.h" />
     <ClInclude Include="include\utility\Win32Wrapper.h" />
     <ClInclude Include="include\platform\Window.h" />

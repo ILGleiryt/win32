@@ -4,42 +4,42 @@
 #include "utility/MyTypes.h"
 
 #include <stdexcept>
+#include <wchar.h>
 
 class Window
 {
 public:
-
-	Window(const winByte* wnd_title, const signedInt wnd_width, const signedInt wnd_height);
+	Window(const wchar_t* wnd_title, const int wnd_width, const int wnd_height);
 	~Window() noexcept;
 
 	Window& operator=(const Window& w) = delete;
 	Window(const Window&) = delete;
 
 	void setFullScreen(bool fullscreen, bool borderless = false) noexcept;
-	void Resize(const signedInt width, const signedInt height) noexcept;
+	void Resize(const int width, const int height) noexcept;
 	bool ProcessSystemMessages() noexcept;
 	float GetDPI_X() noexcept;
 
-	const winByte* GetName() const noexcept { return wnd_name; };
+	const wchar_t* GetName() const noexcept { return wnd_name; };
 	HINSTANCE GetInstance() const noexcept { return hinstance; };
-	signedInt GetHeight() const noexcept { return m_height; };
-	signedInt GetWidth() const noexcept { return m_width; };
+	int GetHeight() const noexcept { return m_height; };
+	int GetWidth() const noexcept { return m_width; };
 	HWND Get_Handle() const noexcept { return m_hwnd; };
 
 private:
 
-	signedInt m_windowX, m_windowY, m_windowWidth, m_windowHeight;
+	int m_windowX, m_windowY, m_windowWidth, m_windowHeight;
 	DWORD m_windowStyle, m_windowExStyle; 
-	const winByte* wnd_name{ L"Game" };
+	const wchar_t* wnd_name = L"Game" ;
 	bool m_fullscreen{ false };
 	float m_wndDPI{}; //m_wndDPI stores current monitor dpi
 	HWND m_hwnd{ nullptr };
 	HINSTANCE hinstance{};
-	signedInt m_width{};
-	signedInt m_height{};
+	int m_width{};
+	int m_height{};
 
 	static LRESULT CALLBACK MyWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-	void SizeWindow(HWND hwnd, signedInt width, signedInt height, float scale) noexcept;
-	void ValidateWindowSize(signedInt wnd_width, signedInt wnd_height) const noexcept;
+	void SizeWindow(HWND hwnd, int width, int height, float scale) noexcept;
+	void ValidateWindowSize(int wnd_width, int wnd_height) const noexcept;
 };

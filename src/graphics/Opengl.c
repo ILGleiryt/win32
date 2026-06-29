@@ -16,99 +16,104 @@
 
 typedef HGLRC(WINAPI* PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int*);
 
-const PIXELFORMATDESCRIPTOR OpenGL::pfd {
+static const PIXELFORMATDESCRIPTOR pfd = {
     sizeof(PIXELFORMATDESCRIPTOR), 1,
     PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
     PFD_TYPE_RGBA, 32, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 24, 8, 0,PFD_MAIN_PLANE, 0, 0, 0, 0 
 };
 
-bool OpenGL::Init(HWND hwnd) noexcept
+bool gl_init(OpenGL* gl, HWND hwnd)
 {
-    m_dc = GetDC(hwnd);
-    m_hwnd = hwnd;
-    if (!m_dc) return false;
+    if (!gl || !hwnd) return false;
+    gl->dc = GetDC(hwnd);
+    gl->hwnd = hwnd;
 
-    pixel_format = ChoosePixelFormat(m_dc, &pfd);
-    if (!pixel_format || !SetPixelFormat(m_dc, pixel_format, &pfd))
+    gl->pixel_format = ChoosePixelFormat(gl->dc, &pfd);
+    if (!gl->pixel_format || !SetPixelFormat(gl->dc, gl->pixel_format, &pfd))
     {
-        ReleaseDC(m_hwnd, m_dc);
-        m_dc = nullptr;
+        ReleaseDC(gl->hwnd, gl->dc);
+        gl->dc = NULL;
         return false;
     }
 
-    HGLRC temp_rc = wglCreateContext(m_dc);
+    HGLRC temp_rc = wglCreateContext(gl->dc);
     if (!temp_rc)
     {
-        ReleaseDC(m_hwnd, m_dc);
-        m_dc = nullptr;
+        ReleaseDC(gl->hwnd, gl->dc);
+        gl->dc = NULL;
         return false;
     }
-    if (!wglMakeCurrent(m_dc, temp_rc))
+    if (!wglMakeCurrent(gl->dc, temp_rc))
     {
         wglDeleteContext(temp_rc);
-        ReleaseDC(m_hwnd, m_dc);
-        m_dc = nullptr;
+        ReleaseDC(gl->hwnd, gl->dc);
+        gl->dc = NULL;
         return false;
     }
 
     PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
 
-    if (!gladLoaderLoadWGL(m_dc) || !gladLoaderLoadGL())
+    if (!gladLoaderLoadWGL(gl->dc) || !gladLoaderLoadGL())
     {
         wglDeleteContext(temp_rc);
-        ReleaseDC(m_hwnd, m_dc);
-        m_dc = nullptr;
+        ReleaseDC(gl->hwnd, gl->dc);
+        gl->dc = NULL;
         return false;
     }
     
-    signedInt attribs[] = {
+    static const int attribs[] = {
        WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
        WGL_CONTEXT_MINOR_VERSION_ARB, 6,
        WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
        0
     };
     HGLRC new_rc = wglCreateContextAttribsARB ?
-        wglCreateContextAttribsARB(m_dc, nullptr, attribs) : nullptr;
+        wglCreateContextAttribsARB(gl->dc, NULL, attribs) : NULL;
     if (!new_rc)
-        new_rc = wglCreateContext(m_dc);
+        new_rc = wglCreateContext(gl->dc);
 
-    wglMakeCurrent(nullptr, nullptr);
+    wglMakeCurrent(NULL, NULL);
     wglDeleteContext(temp_rc);
 
-    if (!wglMakeCurrent(m_dc, new_rc))
+    if (!wglMakeCurrent(gl->dc, new_rc))
     {
         wglDeleteContext(new_rc);
-        ReleaseDC(m_hwnd, m_dc);
-        m_dc = nullptr;
+        ReleaseDC(gl->hwnd, gl->dc);
+        gl->dc = NULL;
         return false;
     }
 
-    m_hglrc = new_rc;
+    gl->hglrc = new_rc;
     glEnable(GL_DEPTH_TEST);
     return true;
 }
 
-bool OpenGL::MakeCurrent() const noexcept
+bool gl_make_current(OpenGL* gl)
 {
-    if (!m_dc || !m_hglrc) return false;
-    return wglMakeCurrent(m_dc, m_hglrc) == TRUE;
+    if (!gl || !gl->dc || !gl->hglrc) return false;
+    return wglMakeCurrent(gl->dc, gl->hglrc) == TRUE;
 }
-void OpenGL::SwapBuffers() const noexcept
+void gl_swap_buffers(OpenGL* gl)
 {
-    ::SwapBuffers(m_dc);
+    if (gl && gl->dc)
+        SwapBuffers(gl->dc);
 }
-void OpenGL::Shutdown() noexcept
+HDC get_HDC(OpenGL* gl)
 {
-    if (m_hglrc)
+    return gl ? gl->dc : NULL;
+}
+void gl_exit(OpenGL* gl)
+{
+    if (gl->hglrc)
     {
-        wglMakeCurrent(nullptr, nullptr);
-        wglDeleteContext(m_hglrc);
-        m_hglrc = nullptr;
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(gl->hglrc);
+        gl->hglrc = NULL;
     }
-    if (m_dc && m_hwnd)
+    if (gl->dc && gl->hwnd)
     {
-        ReleaseDC(m_hwnd, m_dc);
-        m_dc = nullptr;
+        ReleaseDC(gl->hwnd, gl->dc);
+        gl->dc = NULL;
     }
 }
