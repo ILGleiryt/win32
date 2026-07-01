@@ -5,13 +5,19 @@
 static const wchar_t* WINDOW_CLASS_NAME = L"GameClass";
 static const float DEFAULT_DPI = 96.0f;
 
-static bool window_validate_size(int width, int height)
+static bool window_validate_size(int* width, int* height)
 {
-	if (width <= 0 || height <= 0)
+	if (!width || !height) return false;
+
+	if (*width == 0 || *height == 0)
 	{
 		MessageBoxExW(NULL, L"Wrong window size", L"Window size error", MB_OK | MB_ICONERROR, 0);
 		return false;
 	}
+
+	if (*width < 0) *width = -*width;
+	if (*height < 0) *height = -*height;
+
 	return true;
 }
 
@@ -23,12 +29,12 @@ static float get_dpi()
 	return dpi_x / DEFAULT_DPI;
 }
 
-static void size_window(HWND hwnd, int client_width, int client_height, float scale)
+static void size_window(Window* win, HWND hwnd, int client_width, int client_height, float scale)
 {
 	int physic_width = (int)(client_width * scale);
 	int physic_height = (int)(client_height * scale);
 
-	if (!window_validate_size(physic_width, physic_height)) return;
+	window_validate_size(&physic_width, &physic_height);
 
 	RECT rc = { 0, 0, physic_width, physic_height };
 	DWORD style = (DWORD)GetWindowLongPtrW(hwnd, GWL_STYLE);
@@ -47,7 +53,7 @@ bool window_init(Window* win, const wchar_t* name, int width, int height)
 {
 	SetProcessDPIAware();
 	if (!win) return false;
-	if (!window_validate_size(width, height)) return false;
+	window_validate_size(&width, &height);
 
 	win->wnd_title = name;
 	win->class_name = WINDOW_CLASS_NAME;
@@ -213,7 +219,7 @@ LRESULT CALLBACK window_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 	case WM_DPICHANGED: {
 		win->dpi_scale = HIWORD(wParam) / DEFAULT_DPI;
-		size_window(hwnd, win->width, win->height, win->dpi_scale);
+		size_window(win, hwnd, win->width, win->height, win->dpi_scale);
 		break;
 	}
 
@@ -285,12 +291,12 @@ void window_resize(Window* win, int width, int height) {
 		window_set_fullscreen(win, false, false);
 	}
 
-	if (!window_validate_size(width, height)) return;
+	window_validate_size(&width, &height);
 
 	win->width = width;
 	win->height = height;
 
-	size_window(win->hwnd, width, height, win->dpi_scale);
+	size_window(win, win->hwnd, width, height, win->dpi_scale);
 }
 
 const wchar_t* window_get_classname(const Window* win)

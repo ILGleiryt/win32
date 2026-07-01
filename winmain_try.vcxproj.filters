@@ -78,10 +78,10 @@
     <ClCompile Include="src\math\Vector4.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Game.cpp">
+    <ClCompile Include="src\core\Game.c">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

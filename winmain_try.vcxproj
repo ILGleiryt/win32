@@ -181,10 +181,10 @@
     <ClCompile Include="src\core\Renderer.c" />
     <ClCompile Include="src\math\Vector2.cpp" />
     <ClCompile Include="src\graphics\Opengl.c" />
-    <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\Game.c" />
     <ClCompile Include="dependencies\glad\src\gl.c" />
     <ClCompile Include="src\core\Input.c" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Game.h" />

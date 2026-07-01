@@ -5,9 +5,7 @@
 #include "core/Input.h"
 #include "core/Renderer.h"
 #include "platform/Window.h"
-#include <iostream> //<stdio>?
 
-#include <chrono>
 #include <stdbool.h>
 #include <time.h> // <time>?
 
@@ -18,29 +16,31 @@
 // - INPUT.h TODO >> Delete all GetAsyncKey and catch user input in window procedure in Windod.cpp
 // WM_KEYDOWN etc Input singleton??
 // Possibly create option to create custom cursor and animation for him
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum GameState // struct or class type added in c++11 and provide namespace for enum usage -> int a = GameState::INTRO;
 {
 	INTRO, MAIN_MENU, GAME, PAUSE, WIN, LOSE, ENDING, // 	syntax to use [logic condition([expression] [operator]  
 	//(this true type is int by default )GameState::GAME)];
 } GameState;
 
-class Game
-{
-private:
-	OpenGL m_gl;
-	Window m_window;
-	Renderer m_renderer;
-	Input m_input;
-
+typedef struct Game {
+	Renderer renderer;
+	OpenGL opengl;
+	Window window;
+	Input input;
 	bool running;
-	std::chrono::steady_clock::time_point m_last_time;
+} Game;
 
-public:
+bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const int wnd_height);
+void game_shutdown(Game* game);
+void game_gameloop(Game* game);
 
-	Game(const wchar_t* wnd_title, const int wnd_width, const int wnd_height);
-	~Game();
+#ifdef __cplusplus
+}
+#endif
 
-	void Run();
-	void Shutdown();
-};
 #endif // GAME_H
