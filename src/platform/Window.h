@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "utility/Win32Wrapper.h"
+#include "../utility/Win32Wrapper.h"
 #include <stdbool.h>
 #include <wchar.h>
 

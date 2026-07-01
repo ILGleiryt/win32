@@ -2,7 +2,7 @@
 #define INPUT_H
 
 #include <stdbool.h>
-#include "utility/Win32Wrapper.h"
+#include "../utility/Win32Wrapper.h"
 
 #ifdef __cplusplus
 extern "C" {

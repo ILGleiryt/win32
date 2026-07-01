@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "core/Game.h"
+#include "Game.h"
+#include <stdbool.h>
 
 bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const int wnd_height)
 {
