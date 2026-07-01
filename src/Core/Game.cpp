@@ -3,16 +3,17 @@
 #include <math/math.h>
 
 Game::Game(const wchar_t* wnd_title, const int wnd_width, const int wnd_height)
-	: m_window(wnd_title, wnd_width, wnd_height),
-	m_renderer(&m_gl)
+	: m_renderer(&m_gl)
 {
-	if (!gl_init(&m_gl, m_window.Get_Handle()))
+	window_init(&m_window, wnd_title, wnd_width, wnd_height);
+	if (!gl_init(&m_gl, window_get_handle(&m_window)))
 	{
 		printf("Failed to initialize OpenGL!\n");
 		running = false;
 		return;
 	}
 	glViewport(0, 0, wnd_width, wnd_height);
+	input_init(&m_input);
 	running = true;
 }
 
@@ -40,29 +41,29 @@ void Game::Run()
 		float dt = std::chrono::duration<float>(now - m_last_time).count();
 		m_last_time = now;
 
-		if (!m_window.ProcessSystemMessages()) 
+		if (!window_process_system_msg(&m_window)) 
 		{
 			running = false;
 			break;
 		}
-		m_input.Update();
-		if (m_input.IsKeyDown('E')) {
-			m_window.Resize(512, 360);   
+		input_update(&m_input);
+		if (input_is_key_down(&m_input, 'E')) {
+			window_resize(&m_window, 512, 360);   
 		}
-		if (m_input.IsKeyDown('R')) {
-			m_window.setFullScreen(true, true);
+		if (input_is_key_down(&m_input, 'R')) {
+			window_set_fullscreen(&m_window, true, true);
 		}
-		if (m_input.IsMouseKeyDown(MK_LBUTTON))
+		if (input_is_key_down(&m_input, MK_LBUTTON))
 		{
 			printf("left mouse clicked\n");
 		}
-		if (m_input.IsMouseKeyDown(MK_RBUTTON))
+		if (input_is_key_down(&m_input, MK_RBUTTON))
 		{
 			printf("right mouse clicked\n");
 		}
 
-		m_renderer.Update(dt);
-		m_renderer.Render();
+		render_update(dt);
+		render(&m_gl);
 	}
 }
 

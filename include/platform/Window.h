@@ -1,45 +1,55 @@
-#pragma once
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include "utility/Win32Wrapper.h"
-#include "utility/MyTypes.h"
-
-#include <stdexcept>
+#include <stdbool.h>
 #include <wchar.h>
 
-class Window
-{
-public:
-	Window(const wchar_t* wnd_title, const int wnd_width, const int wnd_height);
-	~Window() noexcept;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-	Window& operator=(const Window& w) = delete;
-	Window(const Window&) = delete;
+typedef struct Window {
+	HWND hwnd;
+	HINSTANCE hinstance;
+	const wchar_t* wnd_title;
+	const wchar_t* class_name;
 
-	void setFullScreen(bool fullscreen, bool borderless = false) noexcept;
-	void Resize(const int width, const int height) noexcept;
-	bool ProcessSystemMessages() noexcept;
-	float GetDPI_X() noexcept;
+	int width; //real width and height window
+	int height;
+	float dpi_scale; // store current dpi for monitor
+	bool fullscreen;
+	//bool borderless;
 
-	const wchar_t* GetName() const noexcept { return wnd_name; };
-	HINSTANCE GetInstance() const noexcept { return hinstance; };
-	int GetHeight() const noexcept { return m_height; };
-	int GetWidth() const noexcept { return m_width; };
-	HWND Get_Handle() const noexcept { return m_hwnd; };
+	DWORD windowStyle;
+	DWORD windowExStyle;
+	int window_x; // left border of window
+	int window_y; // upper border of window
+	int window_width;
+	int window_height;
 
-private:
+} Window;
 
-	int m_windowX, m_windowY, m_windowWidth, m_windowHeight;
-	DWORD m_windowStyle, m_windowExStyle; 
-	const wchar_t* wnd_name = L"Game" ;
-	bool m_fullscreen{ false };
-	float m_wndDPI{}; //m_wndDPI stores current monitor dpi
-	HWND m_hwnd{ nullptr };
-	HINSTANCE hinstance{};
-	int m_width{};
-	int m_height{};
+bool window_init(Window* win, const wchar_t* name, int width, int height);
+void window_shutdown(Window* win);
 
-	static LRESULT CALLBACK MyWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-	LRESULT CALLBACK HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-	void SizeWindow(HWND hwnd, int width, int height, float scale) noexcept;
-	void ValidateWindowSize(int wnd_width, int wnd_height) const noexcept;
-};
+void window_set_fullscreen(Window* win, bool set_fullscreen, bool borderless);
+void window_resize(Window* win, int width, int height);
+bool window_process_system_msg(Window* win);
+
+const wchar_t* window_get_classname(const Window* win);
+const wchar_t* window_get_wndtitle(const Window* win);
+HINSTANCE window_get_hinstance(const Window* win);
+int window_get_height(const Window* win);
+int window_get_width(const Window* win);
+HWND window_get_handle(const Window* win);
+
+// these functions also maybe need be static
+LRESULT CALLBACK window_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+//LRESULT window_handle_message(Window* win, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // WINDOW_H

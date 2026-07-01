@@ -11,7 +11,7 @@ int main()
 	std::cout << a << "\n" << b;
 	try 
 	{
-		Game game(L"Game111", 300, 300);
+		Game game(L"Game111", 450, 450);
 		game.Run();
 
 		return 0;

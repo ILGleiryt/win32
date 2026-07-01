@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VECTOR3_H
+#define VECTOR3_H
 #include <iostream>
 
 struct Vector3
@@ -27,3 +28,4 @@ struct Vector3
 
 	friend std::ostream& operator<<(std::ostream& os, const Vector3& vec);
 };
+#endif // VECTOR3_H

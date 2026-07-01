@@ -1,28 +1,33 @@
-#pragma once
-#include "utility/MyTypes.h"
+#ifndef INPUT_H
+#define INPUT_H
+
+#include <stdbool.h>
 #include "utility/Win32Wrapper.h"
 
-#include <array>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+typedef struct Input {
+	bool CurrentKeys[256];
+	bool PreviousKeys[256];
+	int mouse_PosX, mouse_PosY;
+	int mouseDeltaX, mouseDeltaY;
+} Input;
 
-struct KeyboardState {};
-enum ButtonState {};
+void input_update(Input* in);
+void input_init(Input* in);
 
-class Input
-{
-public:
-	void Update() noexcept;
+bool input_is_key_released(Input* in, int key_code);
+bool input_is_key_pressed(Input* in, int key_code);
+bool input_is_key_down(Input* in, int key_code);
 
-	int IsKeyPressed(int key_code) const noexcept;
-	int IsKeyReleased(int key_code) const noexcept;
-	int IsKeyDown(int key_code) const noexcept;
-	void MouseDelta(int& x, int& y) noexcept;
-	bool IsMouseKeyDown(char button) const noexcept;
-	void ResetDelta() noexcept;
+bool is_mouse_keydown(Input* in, char button);
+void mouse_delta(Input* in, int x, int y);
+void reset_mouse_delta(Input* in);
 
-private:
-	std::array<bool, 256> CurrentKeys{};
-	std::array<bool, 256> PreviousKeys{};
-	int mouse_PosX{}, mouse_PosY{};
-	int mouseDeltaX{}, mouseDeltaY{};
-};
+#ifdef __cplusplus
+}
+#endif
+
+#endif // INPUT_H

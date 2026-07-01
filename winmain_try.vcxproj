@@ -178,12 +178,12 @@
   <ItemGroup>
     <ClCompile Include="src\math\Vector4.cpp" />
     <ClCompile Include="src\math\Vector3.cpp" />
-    <ClCompile Include="src\core\Renderer.cpp" />
+    <ClCompile Include="src\core\Renderer.c" />
     <ClCompile Include="src\math\Vector2.cpp" />
     <ClCompile Include="src\graphics\Opengl.c" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="dependencies\glad\src\gl.c" />
-    <ClCompile Include="src\core\Input.cpp" />
+    <ClCompile Include="src\core\Input.c" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,11 +195,10 @@
     <ClInclude Include="include\math\math.h" />
     <ClInclude Include="include\math\Vectors\Vector3.h" />
     <ClInclude Include="include\math\Vectors\Vector4.h" />
-    <ClInclude Include="include\utility\MyTypes.h" />
     <ClInclude Include="include\graphics\Opengl.h" />
     <ClInclude Include="include\core\Renderer.h" />
     <ClCompile Include="dependencies\glad\src\wgl.c" />
-    <ClCompile Include="src\platform\Window.cpp" />
+    <ClCompile Include="src\platform\Window.c" />
     <ClInclude Include="include\math\Vectors\Vector2.h" />
     <ClInclude Include="include\utility\Win32Wrapper.h" />
     <ClInclude Include="include\platform\Window.h" />
