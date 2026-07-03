@@ -1,10 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "../graphics/Opengl.h"
+#include "graphics/Opengl.h"
 #include "Input.h"
 #include "Renderer.h"
-#include "../platform/Window.h"
+#include "platform/Window.h"
 
 #include <stdbool.h>
 #include <time.h> // <time>?

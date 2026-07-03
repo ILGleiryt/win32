@@ -2,7 +2,7 @@
 #define INPUT_H
 
 #include <stdbool.h>
-#include "../utility/Win32Wrapper.h"
+#include "utility/Win32Wrapper.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,6 +13,7 @@ typedef struct Input {
 	bool PreviousKeys[256];
 	int mouse_PosX, mouse_PosY;
 	int mouseDeltaX, mouseDeltaY;
+	HWND hwnd;
 } Input;
 
 void input_update(Input* in);
@@ -22,7 +23,7 @@ bool input_is_key_released(Input* in, int key_code);
 bool input_is_key_pressed(Input* in, int key_code);
 bool input_is_key_down(Input* in, int key_code);
 
-bool is_mouse_keydown(Input* in, char button);
+bool is_mouse_keydown(Input* in, int button);
 void mouse_delta(Input* in, int x, int y);
 void reset_mouse_delta(Input* in);
 

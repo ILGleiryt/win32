@@ -1,6 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
-#include "../graphics/Opengl.h"
+#include "graphics/Opengl.h"
 
 
 #ifdef __cplusplus

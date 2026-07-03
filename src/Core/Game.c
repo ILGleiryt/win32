@@ -19,7 +19,7 @@ bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const
 		game->running = false;
 		return false;
 	}
-
+	game->input.hwnd = game->window.hwnd;
 	input_init(&game->input);
 	glViewport(0, 0, wnd_width, wnd_height);
 	game->running = true;
@@ -60,17 +60,17 @@ void game_gameloop(Game* game)
 
 		input_update(&game->input);
 
-		if (input_is_key_down(&game->input, 'E')) {
+		if (input_is_key_pressed(&game->input, 'E')) {
 			window_resize(&game->window, 512, 360);
 		}
-		if (input_is_key_down(&game->input, 'R')) {
+		if (input_is_key_pressed(&game->input, 'R')) {
 			window_set_fullscreen(&game->window, true, true);
 		}
-		if (input_is_key_down(&game->input, MK_LBUTTON))
+		if (is_mouse_keydown(&game->input, VK_LBUTTON))
 		{
 			printf("left mouse clicked\n");
 		}
-		if (input_is_key_down(&game->input, MK_RBUTTON))
+		if (is_mouse_keydown(&game->input, VK_RBUTTON))
 		{
 			printf("right mouse clicked\n");
 		}

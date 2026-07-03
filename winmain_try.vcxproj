@@ -194,6 +194,7 @@
     <ClInclude Include="src\core\Renderer.h" />
     <ClInclude Include="src\graphics\Opengl.h" />
     <ClInclude Include="src\platform\Window.h" />
+    <ClInclude Include="src\utility\BMP_parser.h" />
     <ClInclude Include="src\utility\Win32Wrapper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
