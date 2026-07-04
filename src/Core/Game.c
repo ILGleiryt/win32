@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include "utility/Timer.h"
 
+void game_update_viewport(Game* game);
+
 const char* vertexShaderSource = "#version 460 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "uniform float uAspect;\n"
@@ -42,7 +44,7 @@ bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const
 	timer_init();
 	game->input.hwnd = game->window.hwnd;
 	input_init(&game->input);
-	glViewport(0, 0, wnd_width, wnd_height);
+	game_update_viewport(game);
 	game->running = true;
 
 	return true;
@@ -108,7 +110,7 @@ void game_gameloop(Game* game)
         glBindVertexArray(0);
 
 		int aspectLoc = glGetUniformLocation(shaderProgram, "uAspect");
-		glViewport(0, 0, game->window.width, game->window.height);
+		game_update_viewport(game);
 
 	while (game->running)
 	{
@@ -120,7 +122,7 @@ void game_gameloop(Game* game)
 		timer_update();
 
 		game_update_viewport(game);
-		float aspect = (float)game->window.window_width / game->window.window_height; // use ascpect ratio for correctly appearance
+		float aspect = (float)game->window.window_width / game->window.window_height;// use ascpect ratio for correctly appearance
 		{ // fps counter
 			frameCounter++;
 			double currentTime = timer_get_totaltime();
@@ -153,6 +155,15 @@ void game_gameloop(Game* game)
 			printf("right mouse clicked\n");
 		}
 
+		static int diag_counter = 0;
+		if (++diag_counter % 60 == 0) {
+			RECT clientRect;
+			GetClientRect(game->window.hwnd, &clientRect);
+			printf("FULLSCREEN DIAG: w=%d, h=%d, aspect=%.2f\n",
+				clientRect.right - clientRect.left,
+				clientRect.bottom - clientRect.top,
+				(float)(clientRect.right - clientRect.left) / (clientRect.bottom - clientRect.top));
+		}
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		render_update(dt); //
@@ -161,7 +172,6 @@ void game_gameloop(Game* game)
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		render(&game->opengl);
-		printf("Aspect: %f\n", aspect);//
 	}
 
 	glDeleteVertexArrays(1, &VAO);
@@ -169,13 +179,12 @@ void game_gameloop(Game* game)
 	glDeleteProgram(shaderProgram);
 }
 
-// this function would be change to callback version
-void game_update_viewport(Game* game)
+// this function maybe would be change to callback version
+static void game_update_viewport(Game* game)
 {
 	RECT clientRect;
 	GetClientRect(game->window.hwnd, &clientRect);
 	game->window.window_width = clientRect.right - clientRect.left;
 	game->window.window_height = clientRect.bottom - clientRect.top;
-
 	glViewport(0, 0, game->window.window_width, game->window.window_height);
 }

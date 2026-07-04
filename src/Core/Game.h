@@ -37,7 +37,6 @@ typedef struct Game {
 bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const int wnd_height);
 void game_shutdown(Game* game);
 void game_gameloop(Game* game);
-void game_update_viewport(Game* game);
 
 #ifdef __cplusplus
 }

@@ -15,18 +15,18 @@ typedef struct Window {
 	const wchar_t* wnd_title;
 	const wchar_t* class_name;
 
-	int width; //real width and height window
+	int width; // width and height window * dpi
 	int height;
 	float dpi_scale; // store current dpi for monitor
 	bool fullscreen;
-	//bool borderless;
+	bool borderless;
 
 	DWORD windowStyle;
 	DWORD windowExStyle;
 	int window_x; // left border of window
 	int window_y; // upper border of window
-	int window_width;
-	int window_height;
+	int window_width; // store actual window width(without scale pdi)
+	int window_height; // store actual window height(without scale dpi)
 
 } Window;
 

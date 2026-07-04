@@ -48,6 +48,8 @@ static void size_window(Window* win, HWND hwnd, int client_width, int client_hei
 	SetWindowPos(hwnd, NULL, 0, 0, full_width, full_height, SWP_NOMOVE | SWP_NOZORDER);
 	win->width = client_width;
 	win->height = client_height;
+	win->window_width = physic_width;
+	win->window_height = physic_height;
 }
 
 
@@ -111,6 +113,11 @@ bool window_init(Window* win, const wchar_t* name, int width, int height)
 		return false;
 	}
 
+	RECT clientRect;
+	GetClientRect(win->hwnd, &clientRect);
+	win->window_width = clientRect.right - clientRect.left;
+	win->window_height = clientRect.bottom - clientRect.top;
+
 	ShowWindow(window_get_handle(win), SW_SHOW);
 	UpdateWindow(window_get_handle(win));
 
@@ -168,10 +175,22 @@ void window_set_fullscreen(Window* win, bool set_fullscreen, bool borderless)
 					screenX, screenY, screenWidth, screenHeight,
 					SWP_FRAMECHANGED | SWP_NOZORDER | SWP_SHOWWINDOW);
 				UpdateWindow(hwnd);
+
+				win->width = screenWidth;
+				win->height = screenHeight;
+				win->window_width = screenWidth;
+				win->window_height = screenHeight;
 			}
 		}
 		else {
 			ShowWindow(hwnd, SW_MAXIMIZE);// windowed fullscreen
+
+			RECT clientRect;
+			GetClientRect(hwnd, &clientRect);
+			win->width = clientRect.right - clientRect.left;
+			win->height = clientRect.bottom - clientRect.top;
+			win->window_width = win->width;
+			win->window_height = win->height;
 		}
 
 		win->fullscreen = true;
@@ -184,6 +203,9 @@ void window_set_fullscreen(Window* win, bool set_fullscreen, bool borderless)
 			win->window_width, win->window_height,
 			SWP_FRAMECHANGED | SWP_NOZORDER | SWP_SHOWWINDOW);
 		UpdateWindow(hwnd);
+
+		win->width = win->window_width;
+		win->height = win->window_height;
 
 		win->fullscreen = false;
 	}
@@ -221,6 +243,8 @@ LRESULT CALLBACK window_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 	case WM_DPICHANGED: {
 		win->dpi_scale = HIWORD(wParam) / DEFAULT_DPI;
+		win->window_width = (int)(win->width * win->dpi_scale);
+		win->window_height = (int)(win->height * win->dpi_scale);
 		size_window(win, hwnd, win->width, win->height, win->dpi_scale);
 		break;
 	}
@@ -300,6 +324,8 @@ void window_resize(Window* win, int width, int height) {
 
 	win->width = width;
 	win->height = height;
+	win->window_width = (int)(width * win->dpi_scale);
+	win->window_height = (int)(height * win->dpi_scale);
 
 	size_window(win, win->hwnd, width, height, win->dpi_scale);
 }
