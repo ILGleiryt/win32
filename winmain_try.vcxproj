@@ -182,6 +182,7 @@
     <ClCompile Include="dependencies\glad\src\gl.c" />
     <ClCompile Include="src\core\Input.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\utility\Timer.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\gl.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\graphics\Opengl.h" />
     <ClInclude Include="src\platform\Window.h" />
     <ClInclude Include="src\utility\BMP_parser.h" />
+    <ClInclude Include="src\utility\Timer.h" />
     <ClInclude Include="src\utility\Win32Wrapper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

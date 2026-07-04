@@ -21,10 +21,9 @@
 extern "C" {
 #endif
 
-typedef enum GameState // struct or class type added in c++11 and provide namespace for enum usage -> int a = GameState::INTRO;
+typedef enum GameState
 {
-	INTRO, MAIN_MENU, GAME, PAUSE, WIN, LOSE, ENDING, // 	syntax to use [logic condition([expression] [operator]  
-	//(this true type is int by default )GameState::GAME)];
+	STATE_INTRO, STATE_MAIN_MENU, STATE_SETTINGS, STATE_GAME, STATE_PAUSE, STATE_WIN, STATE_LOSE, STATE_CLOSE,
 } GameState;
 
 typedef struct Game {
@@ -38,6 +37,7 @@ typedef struct Game {
 bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const int wnd_height);
 void game_shutdown(Game* game);
 void game_gameloop(Game* game);
+void game_update_viewport(Game* game);
 
 #ifdef __cplusplus
 }

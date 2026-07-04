@@ -1,3 +1,10 @@
+/* Simple BMP file parser
+*  Usage:
+*   BMPImage img = bmp_load(path, name); bmp_free(img);
+* 
+*   02.07.2026 // dd mm yyyy
+*/
+
 #ifndef BMP_PARSER_H
 #define BMP_PARSER_H
 
@@ -6,6 +13,7 @@
 #include <string.h>
 #include <stdint.h>
 
+// Stores type of structure if != 0x4d42 its not bmp file
 #pragma pack(push, 1)
 typedef struct {
     uint16_t type; 
@@ -14,7 +22,7 @@ typedef struct {
     uint16_t reserved2;
     uint32_t offset;
 } BitmapFileHeader;
-
+// stores all parameters of bmp file, colors, width, height
 typedef struct {
     uint32_t dib_header_size;
     int32_t  width;
@@ -114,4 +122,4 @@ void bmp_free(BMPImage* img)
     }
 }
 
-#endif
+#endif // BMP_PARSER_H

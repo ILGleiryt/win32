@@ -7,7 +7,7 @@
 int main()
 {
 	Game game;
-	if (!game_init(&game, L"Game111", 450, 450)) return -1;
+	if (!game_init(&game, L"Game111", 640, 480)) return -1;
 	BMPImage image = { 0 };
 	if (bmp_load("../flo.bmp", &image)) puts("ok");
 	game_gameloop(&game);

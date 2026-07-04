@@ -46,6 +46,8 @@ static void size_window(Window* win, HWND hwnd, int client_width, int client_hei
 	int full_height = rc.bottom - rc.top;
 
 	SetWindowPos(hwnd, NULL, 0, 0, full_width, full_height, SWP_NOMOVE | SWP_NOZORDER);
+	win->width = client_width;
+	win->height = client_height;
 }
 
 
@@ -250,6 +252,9 @@ LRESULT CALLBACK window_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 		win->width = (int)(new_width / scale);
 		win->height = (int)(new_height / scale);
+
+		win->window_width = new_width;
+		win->window_height = new_height;
 		break;
 	}
 
