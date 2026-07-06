@@ -1,5 +1,6 @@
 #include "core/Game.h"
 #include "utility/BMP_parser.h"
+#include "utility/readFile.h"
 // We need to manually create class Game and call its constructor 
 // with parameters of window - name and size(width, height) > 0,
 // object of Game struct have 2  functions gameloop(*game) which start game loop

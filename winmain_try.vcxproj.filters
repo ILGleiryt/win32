@@ -39,7 +39,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\platform\Window.c">
+    <ClCompile Include="src\platform\win32\Win32Window.c">
       <Filter>Source Files\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="dependencies\glad\src\gl.c">
@@ -80,7 +80,7 @@
     <ClInclude Include="src\utility\Win32Wrapper.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
-    <ClInclude Include="src\platform\Window.h">
+    <ClInclude Include="src\platform\win32\Win32Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\Opengl.h">
@@ -99,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\utility\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utility\readFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

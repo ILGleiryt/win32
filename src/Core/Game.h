@@ -4,7 +4,7 @@
 #include "graphics/Opengl.h"
 #include "Input.h"
 #include "Renderer.h"
-#include "platform/Window.h"
+#include "platform/win32/Win32Window.h"
 
 #include <stdbool.h>
 #include <time.h>

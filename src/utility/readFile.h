@@ -1,15 +1,17 @@
 #ifndef READFILE_H
 #define READFILE_H
 
-#include <cstdio>
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 
-char* readFile(const char* path)
+// read file and store it into buffer
+
+char* eng_readFile(const char* path)
 {
     FILE* file = fopen(path, "r");
     if (!file)
     {
-        printf("Error on read file");
+        printf("Error on read file\n");
         return NULL;
     }
     fseek(file, 0, SEEK_END);
@@ -26,7 +28,7 @@ char* readFile(const char* path)
     if (!buffer)
     {
         fclose(file);
-        printf("Error on alloc buffer");
+        printf("Error on alloc buffer\n");
         return NULL;
     }
 
