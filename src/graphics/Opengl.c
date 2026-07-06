@@ -15,6 +15,9 @@
 #endif
 
 typedef HGLRC(WINAPI* PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int*);
+typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
+
+//PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
 
 static const PIXELFORMATDESCRIPTOR pfd = {
     sizeof(PIXELFORMATDESCRIPTOR), 1,
@@ -52,8 +55,10 @@ bool gl_init(OpenGL* gl, HWND hwnd)
         return false;
     }
 
-    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB =
+    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB =// load wglCreateContextAttrib
         (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+    PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) // load wglSwapInterval
+        wglGetProcAddress("wglSwapIntervalEXT");
 
     HGLRC new_rc = NULL;
 
@@ -111,8 +116,8 @@ bool gl_init(OpenGL* gl, HWND hwnd)
         gl->dc = NULL;
         return false;
     }
-
-    glEnable(GL_DEPTH_TEST);
+    wglSwapIntervalEXT(-1); // this line cotrol vsync on opengl side 0 - off, 1 - on, -1 - automatic, -2 - render every 2 frame
+    //glEnable(GL_DEPTH_TEST); // i dont need it on here i manually call it in gameloop
     return true;
 }
 
