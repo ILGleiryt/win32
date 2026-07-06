@@ -73,44 +73,45 @@ void game_gameloop(Game* game)
 		return;
 	}
 
-        unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(vertexShader);
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
 
-        unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-        glCompileShader(fragmentShader);
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
 
-        unsigned int shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragmentShader);
-        glLinkProgram(shaderProgram);
+    unsigned int shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
 
 
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 
-        float verticies[] = {
-        -0.5f, -0.5f, 0.f,
-         0.5f, -0.5f, 0.f,
-         0.0f, 0.5f, 0.f,
-        };
+    float verticies[] = {
+    -0.5f, -0.5f, 0.f,
+     0.5f, -0.5f, 0.f,
+     0.0f, 0.5f, 0.f,
+    };
 
-        unsigned int VBO, VAO;
-        glGenBuffers(1, &VBO);
-        glGenVertexArrays(1, &VAO);
+    unsigned int VBO, VAO;
+    glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &VAO);
 
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
-		int aspectLoc = glGetUniformLocation(shaderProgram, "uAspect");
-		game_update_viewport(game);
+	int aspectLoc = glGetUniformLocation(shaderProgram, "uAspect");
+
+	game_update_viewport(game);
 
 	while (game->running)
 	{
@@ -155,15 +156,6 @@ void game_gameloop(Game* game)
 			printf("right mouse clicked\n");
 		}
 
-		static int diag_counter = 0;
-		if (++diag_counter % 60 == 0) {
-			RECT clientRect;
-			GetClientRect(game->window.hwnd, &clientRect);
-			printf("FULLSCREEN DIAG: w=%d, h=%d, aspect=%.2f\n",
-				clientRect.right - clientRect.left,
-				clientRect.bottom - clientRect.top,
-				(float)(clientRect.right - clientRect.left) / (clientRect.bottom - clientRect.top));
-		}
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		render_update(dt); //
@@ -175,11 +167,12 @@ void game_gameloop(Game* game)
 	}
 
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &VBO); // create function to delete unused shader data
 	glDeleteProgram(shaderProgram);
 }
 
 // this function maybe would be change to callback version
+// this function with hard if-update logic become unpredictable and ruin properly view of game
 static void game_update_viewport(Game* game)
 {
 	RECT clientRect;

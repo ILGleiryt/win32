@@ -7,15 +7,15 @@
 #include "platform/Window.h"
 
 #include <stdbool.h>
-#include <time.h> // <time>?
+#include <time.h>
 
 // - TODO OpenglRender, GUI, Physics(aabb and windows corner), mouse movement with GetKeyPos and getclientrect
 // - TODO Window -> windows_abs.h && Window -> linux_abs.h
 // - TODO  X11 linux api, xlib | xcb(async new)
 // - TODO Create Opengl abstarction for create windows/linux context
 // - INPUT.h TODO >> Delete all GetAsyncKey and catch user input in window procedure in Windod.cpp
-// WM_KEYDOWN etc Input singleton??
 // Possibly create option to create custom cursor and animation for him
+// TODO: Create helper structure to initialize user window width, height and properly find apsect ratio of usr monitor
 
 #ifdef __cplusplus
 extern "C" {
