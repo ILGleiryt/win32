@@ -183,6 +183,7 @@ xcopy /Y /E "$(SolutionDir)img" "$(TargetDir)img\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="miniaudio.c" />
     <ClCompile Include="src\core\Renderer.c" />
     <ClCompile Include="src\graphics\Opengl.c" />
     <ClCompile Include="src\core\Game.c" />

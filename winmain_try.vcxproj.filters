@@ -66,6 +66,9 @@
     <ClCompile Include="src\utility\Win32Timer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="miniaudio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\gl.h">
