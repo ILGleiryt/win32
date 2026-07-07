@@ -2,6 +2,8 @@
 *  Usage:
 *   BMPImage img = bmp_load(path, name); bmp_free(img);
 * 
+*  Supported only 24 and 32 bits per pixel images
+* 
 *   02.07.2026 // dd mm yyyy
 */
 
@@ -55,28 +57,36 @@ typedef enum BMPError {
 BMPError bmp_load(const char* path, BMPImage* img) 
 {
     FILE* file = fopen(path, "rb");
-    if (!file) return BMP_ERR_FILE;
+    if (!file)
+    {
+        perror("error on open file");
+        return BMP_ERR_FILE;
+    }
 
     if (fread(&img->file_header, sizeof(BitmapFileHeader), 1, file) != 1) 
     {
+        perror("failed to read file");
         fclose(file);
         return BMP_ERR_HEADER;
     }
 
     if (img->file_header.type != 0x4D42) 
     {
+        perror("file type is not bmp");
         fclose(file);
         return BMP_ERR_HEADER;
     }
 
     if (fread(&img->info_header, sizeof(BitmapInfoHeader), 1, file) != 1) 
     {
+        perror("file header parse error");
         fclose(file);
         return BMP_ERR_HEADER;
     }
 
     if (img->info_header.dib_header_size != 40) 
     {
+        perror("error");
         fclose(file);
         return BMP_ERR_FORMAT;
     }
@@ -84,6 +94,7 @@ BMPError bmp_load(const char* path, BMPImage* img)
     if (!((img->info_header.bits_per_pixel == 24 || img->info_header.bits_per_pixel == 32) &&
         img->info_header.compression == 0)) 
     {
+        perror("unsupported bmp type");
         fclose(file);
         return BMP_ERR_FORMAT;
     }
@@ -96,6 +107,7 @@ BMPError bmp_load(const char* path, BMPImage* img)
     img->data = (unsigned char*)malloc(data_size);
     if (!img->data) 
     {
+        perror("malloc error");
         fclose(file);
         return BMP_ERR_MEMORY;
     }
@@ -103,6 +115,7 @@ BMPError bmp_load(const char* path, BMPImage* img)
     fseek(file, img->file_header.offset, SEEK_SET);
     if (fread(img->data, 1, data_size, file) != (size_t)data_size) 
     {
+        perror("error read file data");
         free(img->data);
         img->data = NULL;
         fclose(file);

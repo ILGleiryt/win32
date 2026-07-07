@@ -11,7 +11,7 @@ char* eng_readFile(const char* path)
     FILE* file = fopen(path, "r");
     if (!file)
     {
-        printf("Error on read file\n");
+        perror("Error on read file");
         return NULL;
     }
     fseek(file, 0, SEEK_END);
@@ -20,6 +20,7 @@ char* eng_readFile(const char* path)
 
     if (size <= 0)
     {
+        perror("file size is zero");
         fclose(file);
         return NULL;
     }
@@ -28,7 +29,7 @@ char* eng_readFile(const char* path)
     if (!buffer)
     {
         fclose(file);
-        printf("Error on alloc buffer\n");
+        perror("Error on alloc buffer");
         return NULL;
     }
 

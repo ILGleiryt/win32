@@ -12,7 +12,7 @@
 * }
 */
 
-#include "Timer.h"
+#include "Win32Timer.h"
 
 static LARGE_INTEGER g_frequency;
 static LARGE_INTEGER g_startTime;

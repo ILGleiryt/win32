@@ -3,8 +3,8 @@
 *  Timer for windows platform
 */
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef WIN32TIMER_H
+#define WIN32TIMER_H
 
 #include <windows.h>
 // neew to call this before any other function
@@ -22,4 +22,4 @@ double timer_get_totaltime();
 // return tick per second for this CPU
 double timer_get_frequency();
 
-#endif // TIMER_H
+#endif // WIN32TIMER_H

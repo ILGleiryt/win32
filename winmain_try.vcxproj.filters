@@ -63,7 +63,7 @@
     <ClCompile Include="src\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utility\Timer.c">
+    <ClCompile Include="src\utility\Win32Timer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,7 +98,7 @@
     <ClInclude Include="src\utility\BMP_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utility\Timer.h">
+    <ClInclude Include="src\utility\Win32Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\utility\readFile.h">

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Game.h"
 #include <stdbool.h>
-#include "utility/Timer.h"
+#include "utility/Win32Timer.h"
 
 void game_update_viewport(Game* game);
 
