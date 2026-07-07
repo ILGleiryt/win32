@@ -3,7 +3,7 @@
 #include "utility/readFile.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <utility/Win32Timer.h> 
 // We need to manually create class Game and call its constructor 
 // with parameters of window - name and size(width, height) > 0,
 // object of Game struct have 2  functions gameloop(*game) which start game loop
@@ -11,27 +11,27 @@
 
 int main()
 {
-
-
+	timer_init();
 	Game game;
 	if (!game_init(&game, L"Game111", 640, 480)) return -1;
 	BMPImage image = { 0 };
-	if (bmp_load("../flo.bmp", &image) == 0) printf("ok\n");
+	if (bmp_load("img/flo.bmp", &image) == 0) printf("ok\n");
 
-	ULONGLONG start = GetTickCount64();
 	SYSTEMTIME t = { 0 };
 	GetLocalTime(&t);
-	wprintf(L"Game open: %02d.%02d.%02d %2d:%02d:%02d\n", t.wDay, t.wMonth, t.wYear, t.wHour, t.wMinute, t.wSecond);
+	wprintf(L"Game open: %02d.%02d.%02d %2d:%02d:%02d\n",
+		t.wDay, t.wMonth, t.wYear, t.wHour, t.wMinute, t.wSecond);
 
+	double start = timer_get_totaltime();
 	game_gameloop(&game);
 	game_shutdown(&game);
+	double end = timer_get_totaltime();
+	double duration = end - start;
 
 	GetLocalTime(&t);
 	wprintf(L"Game closed: %02d.%02d.%02d %2d:%02d:%02d\n", t.wDay, t.wMonth, t.wYear, t.wHour, t.wMinute, t.wSecond);
 
-	ULONGLONG end = GetTickCount64();
-	ULONGLONG game_duration = end - start;
-	printf("Game has been running: %.2f seconds\n", game_duration / 1000.0);
+	printf("Game has been running: %.3f seconds\n", duration);
 	bmp_free(&image);
 
 	return 0;

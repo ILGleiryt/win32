@@ -10,12 +10,14 @@
 #include <time.h>
 
 // - TODO OpenglRender, GUI, Physics(aabb and windows corner), mouse movement with GetKeyPos and getclientrect
-// - TODO Window -> windows_abs.h && Window -> linux_abs.h
+// - TODO Window -> windows_abs.h && Window -> linux_abs.h // i need window.h
+// as abstraction layer and win32window.c linuxwindow.c realizations
 // - TODO  X11 linux api, xlib | xcb(async new)
 // - TODO Create Opengl abstarction for create windows/linux context
 // - INPUT.h TODO >> Delete all GetAsyncKey and catch user input in window procedure in Windod.cpp
-// Possibly create option to create custom cursor and animation for him
-// TODO: Create helper structure to initialize user window width, height and properly find apsect ratio of usr monitor
+// - TODO: Possibly create option to create custom cursor and animation for him
+// - TODO: Create helper structure to initialize user window width, height and properly find apsect ratio of usr monitor
+// - TODO: Rewrite Input to support crosspatform, add self key codes 
 
 #ifdef __cplusplus
 extern "C" {
