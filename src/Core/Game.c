@@ -2,6 +2,7 @@
 #include "Game.h"
 #include <stdbool.h>
 #include "utility/Win32Timer.h"
+#include "input/ActionMapper.h"
 
 void game_update_viewport(Game* game);
 
@@ -45,6 +46,7 @@ bool game_init(Game* game,  const wchar_t* wnd_title, const int wnd_width, const
 	game->input.hwnd = game->window.hwnd;
 	input_init(&game->input);
 	game_update_viewport(game);
+	ActionInputInit();
 	game->running = true;
 
 	return true;
@@ -140,25 +142,19 @@ void game_gameloop(Game* game)
 		//printf("Delta: %f ms\n", dt * 1000.0); // print elapsed miliseconds from render frame, currently 16.6-18 on my system with vsync
 		
 		input_update(&game->input);
+		ActionsUpdate(&game->input);
 
-		if (input_is_key_pressed(&game->input, 'E')) {
-			window_resize(&game->window, 512, 360);
-		}
-		if (input_is_key_pressed(&game->input, 'R')) {
-			window_set_fullscreen(&game->window, true, true);
-		}
-		if (is_mouse_keydown(&game->input, VK_LBUTTON))
-		{
-			printf("left mouse clicked\n");
-		}
-		if (is_mouse_keydown(&game->input, VK_RBUTTON))
-		{
-			printf("right mouse clicked\n");
-		}
+		if (input_justpress(&game->input, KEY_SPACE)) printf("WORK");
+
+		if (Action_Pressed(ACTION_MOVE_FORWARD)) printf("I move forward");
+		if (Action_Pressed(ACTION_MOVE_BACKWARD)) printf("I move back");
+		if (Action_Pressed(ACTION_MOVE_RIGHT)) printf("I move right");
+		if (Action_Pressed(ACTION_MOVE_LEFT)) printf("I move left");
+		if (Action_Hold(ACTION_SHOOT)) printf("tratata");
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		render_update(dt); //
+		render_update(dt);
 		glUseProgram(shaderProgram);
 		glUniform1f(aspectLoc, aspect);
 		glBindVertexArray(VAO);

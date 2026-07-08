@@ -1,10 +1,10 @@
-#include "core/Game.h"
-#include "utility/BMP_parser.h"
-#include "utility/readFile.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <utility/Win32Timer.h>
 #include "../dependencies/miniaudio.h"
+#include "utility/BMP_parser.h"
+#include <utility/Win32Timer.h>
+#include "utility/readFile.h"
+#include "core/Game.h"
+#include <stdlib.h>
+#include <stdio.h>
 // We need to manually create class Game and call its constructor 
 // with parameters of window - name and size(width, height) > 0,
 // object of Game struct have 2  functions gameloop(*game) which start game loop
@@ -32,7 +32,6 @@ void virt_console_init()
 
 int main()
 {
-
 	virt_console_init();
 
 	printf("\033[31mКрасный\033[0m\n");
@@ -48,7 +47,6 @@ int main()
 		return result; 
 	}
 	ma_engine_play_sound(&engine, "../../money.wav", NULL);
-
 
 	timer_init();
 	Game game;

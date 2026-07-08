@@ -48,7 +48,7 @@
     <ClCompile Include="dependencies\glad\src\wgl.c">
       <Filter>Source Files\3rdParty</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Input.c">
+    <ClCompile Include="src\input\Input.c">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\Opengl.c">
@@ -67,6 +67,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="miniaudio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\ActionMapper.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +95,7 @@
     <ClInclude Include="src\core\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Input.h">
+    <ClInclude Include="src\input\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Renderer.h">
@@ -105,6 +108,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\utility\readFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\miniaudio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\ActionMapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

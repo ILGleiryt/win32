@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "graphics/Opengl.h"
-#include "Input.h"
+#include "input/Input.h"
 #include "Renderer.h"
 #include "platform/win32/Win32Window.h"
 

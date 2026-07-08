@@ -151,7 +151,8 @@
     </Manifest>
     <PostBuildEvent>
       <Command>if not exist "$(TargetDir)img" mkdir "$(TargetDir)img"
-xcopy /Y /E "$(SolutionDir)img" "$(TargetDir)img\"</Command>
+xcopy "$(SolutionDir)img\*" "$(TargetDir)img\" /E /I /Y &gt; nul
+exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -179,7 +180,9 @@ xcopy /Y /E "$(SolutionDir)img" "$(TargetDir)img\"</Command>
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
     <PostBuildEvent>
-      <Command>if not exist "$(TargetDir)img" mkdir "$(TargetDir)img"</Command>
+      <Command>if not exist "$(TargetDir)img" mkdir "$(TargetDir)img"
+xcopy "$(SolutionDir)img\*" "$(TargetDir)img\" /E /I /Y &gt; nul
+exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -188,7 +191,8 @@ xcopy /Y /E "$(SolutionDir)img" "$(TargetDir)img\"</Command>
     <ClCompile Include="src\graphics\Opengl.c" />
     <ClCompile Include="src\core\Game.c" />
     <ClCompile Include="dependencies\glad\src\gl.c" />
-    <ClCompile Include="src\core\Input.c" />
+    <ClCompile Include="src\input\ActionMapper.c" />
+    <ClCompile Include="src\input\Input.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\utility\Win32Timer.c" />
   </ItemGroup>
@@ -198,8 +202,10 @@ xcopy /Y /E "$(SolutionDir)img" "$(TargetDir)img\"</Command>
     <ClInclude Include="dependencies\KHR\khrplatform.h" />
     <ClCompile Include="dependencies\glad\src\wgl.c" />
     <ClCompile Include="src\platform\win32\Win32Window.c" />
+    <ClInclude Include="dependencies\miniaudio.h" />
     <ClInclude Include="src\core\Game.h" />
-    <ClInclude Include="src\core\Input.h" />
+    <ClInclude Include="src\input\ActionMapper.h" />
+    <ClInclude Include="src\input\Input.h" />
     <ClInclude Include="src\core\Renderer.h" />
     <ClInclude Include="src\graphics\Opengl.h" />
     <ClInclude Include="src\platform\win32\Win32Window.h" />
